@@ -1,0 +1,105 @@
+import 'package:deepfake_app/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class DeepfakeAppBar extends StatefulWidget implements PreferredSizeWidget {
+  DeepfakeAppBar({
+    Key key,
+    @required this.title,
+  }) : super(key: key);
+
+  final String title;
+
+  @override
+  _DeepfakeAppBarState createState() => _DeepfakeAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(56);
+}
+
+class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
+  final options = [
+    ThemeChanger(),
+    Center(
+      child: RaisedButton(
+        onPressed: () => print("Logout"),
+        color: DeepfakeColors.danger,
+        child: Text(
+          "Logout",
+          style: TextStyle(color: Colors.white),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: DeepfakeColors.danger),
+        ),
+      ),
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      title: Text(
+        widget.title,
+      ),
+      actions: [
+        PopupMenuButton<dynamic>(
+          tooltip: 'Settings',
+          color: Colors.black,
+          itemBuilder: (context) {
+            return options.map((choice) {
+              return PopupMenuItem(
+                enabled: false,
+                value: choice,
+                child: choice,
+              );
+            }).toList();
+          },
+          icon: Icon(
+            FontAwesomeIcons.cog,
+            size: 20,
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ThemeChanger extends StatefulWidget {
+  const ThemeChanger({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _ThemeChangerState createState() => _ThemeChangerState();
+}
+
+class _ThemeChangerState extends State<ThemeChanger> {
+  bool isDark = true;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: handleSelection,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Theme",
+            style: TextStyle(color: Colors.white),
+          ),
+          Icon(
+            isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
+          )
+        ],
+      ),
+    );
+  }
+
+  void handleSelection() {
+    print("Theme Change");
+    setState(() {
+      isDark = !isDark;
+    });
+  }
+}
