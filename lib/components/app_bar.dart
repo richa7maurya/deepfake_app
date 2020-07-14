@@ -17,6 +17,8 @@ class DeepfakeAppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(56);
 }
 
+bool isDark = true;
+
 class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   final options = [
     ThemeChanger(),
@@ -47,10 +49,16 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
         PopupMenuButton<dynamic>(
           tooltip: 'Settings',
           color: Colors.black,
+          onSelected: (value) {
+            if (value.runtimeType.toString() == 'ThemeChanger') {
+              setState(() {
+                isDark = !isDark;
+              });
+            }
+          },
           itemBuilder: (context) {
             return options.map((choice) {
               return PopupMenuItem(
-                enabled: false,
                 value: choice,
                 child: choice,
               );
@@ -76,30 +84,19 @@ class ThemeChanger extends StatefulWidget {
 }
 
 class _ThemeChangerState extends State<ThemeChanger> {
-  bool isDark = true;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: handleSelection,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Theme",
-            style: TextStyle(color: Colors.white),
-          ),
-          Icon(
-            isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
-          )
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Theme",
+          style: TextStyle(color: Colors.white),
+        ),
+        Icon(
+          isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
+        )
+      ],
     );
-  }
-
-  void handleSelection() {
-    print("Theme Change");
-    setState(() {
-      isDark = !isDark;
-    });
   }
 }
