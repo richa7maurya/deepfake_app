@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
-  bool _visible = false, _flag = false;
+  bool _visible = true, _flag = false;
 
   @override
   void initState() {
@@ -85,11 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: VideoPlayer(_controller),
                                               );
                                             } else {
-                                              // // if (_flag == false)
-                                              // setState(() {
-                                              // //  this._visible = false;
-                                              //   //     this._flag = true;
-                                              // });
                                               return Center(
                                                   child:
                                                       CircularProgressIndicator());
