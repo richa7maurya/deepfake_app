@@ -14,7 +14,6 @@ dependencies:
     cupertino_icons: ^0.1.3
     font_awesome_flutter:
     video_player:
-    popup_menu:
 
 flutter:
     uses-material-design: true

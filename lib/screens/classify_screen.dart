@@ -85,7 +85,7 @@ class _ClassifyFilesState extends State<ClassifyFile> {
 
     _initializeVideoPlayerFuture = _controller.initialize();
     isAPICalled = false;
-    _visible = false;
+    _visible = true;
     _controller.setLooping(true);
     super.initState();
   }
@@ -102,7 +102,11 @@ class _ClassifyFilesState extends State<ClassifyFile> {
               children: <Widget>[
                 Text(
                   'Your video has been sent for classification. Your will see the results in the history.',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
