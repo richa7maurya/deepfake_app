@@ -1,164 +1,133 @@
 import 'package:deepfake_app/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
+  final Function callback;
+
+  const HomeScreen({Key key, this.callback}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
-  bool _visible = true, _flag = false;
+  YoutubePlayerController _controller;
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
-
-    _initializeVideoPlayerFuture = _controller.initialize();
-    _visible = true;
-    _flag = false;
-    _controller.setLooping(true);
     super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: 'C8FO0P2a3dA',
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Scaffold(
-        backgroundColor: DeepfakeColors.background,
-        body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Card(
-                    child: Container(
-                      color: DeepfakeColors.cardBackground,
+    return Scaffold(
+      backgroundColor: DeepfakeColors.background,
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Card(
+                color: DeepfakeColors.cardBackground,
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12)),
+                      height: MediaQuery.of(context).size.height / 2.5,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  this._visible = !this._visible;
-                                  if (_controller.value.isPlaying) {
-                                    _controller.pause();
-                                  } else {
-                                    _controller.play();
-                                  }
-                                });
-                              },
-                              child: Stack(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          border: Border.all(
-                                            color: DeepfakeColors.primary,
-                                            width: 3.0,
-                                          )),
-                                      child: Center(
-                                          child: Padding(
-                                        padding: EdgeInsets.all(4),
-                                        child: FutureBuilder(
-                                          future: _initializeVideoPlayerFuture,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              return AspectRatio(
-                                                aspectRatio: _controller
-                                                    .value.aspectRatio,
-                                                child: VideoPlayer(_controller),
-                                              );
-                                            } else {
-                                              return Center(
-                                                  child:
-                                                      CircularProgressIndicator());
-                                            }
-                                          },
-                                        ),
-                                      )),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: this._visible,
-                                    child: Container(
-                                      height: 180,
-                                      child: Center(
-                                          child: ButtonTheme(
-                                              child: Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.play_arrow,
-                                          size: 40.0,
-                                          color: Colors.white,
-                                        ),
-                                      ))),
-                                    ),
-                                  ),
-                                ],
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          child: Center(
+                            child: YoutubePlayer(
+                              controller: _controller,
+                              showVideoProgressIndicator: true,
+                              progressIndicatorColor: Colors.amber,
+                              progressColors: ProgressBarColors(
+                                playedColor: DeepfakeColors.primary,
+                                handleColor: DeepfakeColors.secondary,
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10.0, bottom: 4),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  "What are we solving?",
-                                  style: TextStyle(
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: DeepfakeColors.primary,
+                              width: 3,
                             ),
-                            Text(
-                              "Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes, including Image Modification, Fabrication using Cheap & Deep Fake Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a fabricated Image/Video with an original one. Technology that can help address the issue: AI/ML techniques can be used.",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w100,
-                                color: Colors.white,
-                              ),
+                            borderRadius: BorderRadius.circular(
+                              12,
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  RaisedButton(
-                    color: DeepfakeColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              'What are we solving?',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              bottom: 12,
+                            ),
+                            child: Text(
+                              'Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/classify');
-                    },
-                    child: const Text('START CLASSIFYING',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        )),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  color: DeepfakeColors.primary,
+                  onPressed: () => this.widget.callback(1),
+                  child: Text(
+                    'Start Classifying',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

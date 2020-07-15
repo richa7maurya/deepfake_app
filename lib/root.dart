@@ -18,12 +18,26 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   final titles = ["Home", "Classify", "History", "About Us"];
   int _currentIndex = 0;
+  HomeScreen homeScreen;
   final screens = [
-    HomeScreen(),
     ClassifyScreen(),
     HistoryScreen(),
-    AboutScreen()
+    AboutScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    homeScreen = HomeScreen(callback: this.callback);
+    screens.insert(0, homeScreen);
+  }
+
+  void callback(int i) {
+    setState(() {
+      _currentIndex = i;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

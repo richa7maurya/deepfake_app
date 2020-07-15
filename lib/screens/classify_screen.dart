@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import '../colors.dart';
 
@@ -8,119 +12,58 @@ class ClassifyScreen extends StatefulWidget {
 }
 
 class _ClassifyScreenState extends State<ClassifyScreen> {
-  var state = 0;
+  final ImagePicker _picker = ImagePicker();
+  VideoPlayerController _videoPlayerController;
+  ChewieController chewieController;
+  PickedFile _video;
   @override
   void initState() {
     super.initState();
-    state = 0;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: state == 0 ? UploadVideo(this) : ClassifyFile(this));
-  }
-}
+  _pickVideo() async {
+    final video = await _picker.getVideo(source: ImageSource.gallery);
 
-class UploadVideo extends StatelessWidget {
-  _ClassifyScreenState parent;
-  UploadVideo(this.parent) {}
+    if (video != null) {
+      _videoPlayerController = VideoPlayerController.file(File(video.path));
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          'Hi! You can begin classifying videos or photos by tapping the UPLOAD button below',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
+      chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        autoPlay: true,
+        looping: true,
+        materialProgressColors: ChewieProgressColors(
+          playedColor: DeepfakeColors.primary,
         ),
-        const SizedBox(height: 40),
-        RaisedButton(
-          color: DeepfakeColors.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          onPressed: () {
-            this.parent.setState(() {
-              this.parent.state = 1;
-            });
-          },
-          child: const Text('UPLOAD',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              )),
-        ),
-      ],
-    );
-  }
-}
+      );
 
-class ClassifyFile extends StatefulWidget {
-  _ClassifyScreenState parent;
-  ClassifyFile(this.parent);
-  @override
-  _ClassifyFilesState createState() => _ClassifyFilesState(this.parent);
-}
-
-class _ClassifyFilesState extends State<ClassifyFile> {
-  _ClassifyScreenState parent;
-  _ClassifyFilesState(this.parent) {}
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
-  bool _visible = true, isAPICalled = false;
-
-  @override
-  void initState() {
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
-
-    _initializeVideoPlayerFuture = _controller.initialize();
-    isAPICalled = false;
-    _visible = true;
-    _controller.setLooping(true);
-    super.initState();
+      setState(() {
+        _video = video;
+      });
+    }
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
+  _sendToClassify() {
+    showDialog(
       context: context,
-      barrierDismissible: false,
       builder: (BuildContext context) {
+        // return object of type Dialog
         return AlertDialog(
           backgroundColor: Colors.black,
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Your video has been sent for classification. Your will see the results in the history.',
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+          content: Text(
+            "Your video has been sent for classification. You'll see the results in your History.",
+            style: TextStyle(
+              color: Colors.white,
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
+            new FlatButton(
+              child: Text(
+                "Ok",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
-                this.setState(() {
-                  this.isAPICalled = !this.isAPICalled;
-                  this.parent.setState(() {
-                    this.parent.state = 0;
-                  });
-                });
                 Navigator.of(context).pop();
               },
             ),
@@ -128,94 +71,61 @@ class _ClassifyFilesState extends State<ClassifyFile> {
         );
       },
     );
+    // TODO: Call /classify
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    chewieController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10),
+    return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                this._visible = !this._visible;
-                if (_controller.value.isPlaying) {
-                  _controller.pause();
-                } else {
-                  _controller.play();
-                }
-              });
-            },
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: DeepfakeColors.primary,
-                          width: 3.0,
-                        )),
-                    child: Center(
-                        child: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: FutureBuilder(
-                        future: _initializeVideoPlayerFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(_controller),
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
-                    )),
-                  ),
-                ),
-                Visibility(
-                  visible: this._visible,
-                  child: Container(
-                    height: 180,
-                    child: Center(
-                        child: ButtonTheme(
-                            child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.play_arrow,
-                        size: 40.0,
-                        color: Colors.white,
-                      ),
-                    ))),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: RaisedButton(
-              color: DeepfakeColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              onPressed: () {
-                this.setState(() {
-                  this.isAPICalled = !this.isAPICalled;
-                });
-                this._showMyDialog();
-              },
-              child: const Text('CLASSIFY',
+          _video == null
+              ? Text(
+                  'Hi! You can begin classifying videos or photos by tapping the UPLOAD button below.',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
-                    fontWeight: FontWeight.w500,
                     color: Colors.white,
-                  )),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    child: Chewie(controller: chewieController),
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.height / 2,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: DeepfakeColors.primary,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+          const SizedBox(height: 40),
+          RaisedButton(
+            color: DeepfakeColors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            onPressed: _video == null ? _pickVideo : _sendToClassify,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28.0),
+              child: Text(
+                _video == null ? 'UPLOAD' : 'CLASSIFY',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ],

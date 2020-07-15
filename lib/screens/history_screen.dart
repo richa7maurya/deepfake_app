@@ -28,14 +28,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   List<VideoItem> array;
 
-  _HistoryScreenState() {}
+  _HistoryScreenState();
 
   @override
   void initState() {
+    // TODO: Call /fetchHistory
     super.initState();
     for (int i = 0; i < str.length; i++)
       this.historyList.add(
-            VideoItem(this, str.elementAt(i), str.elementAt(i)),
+            VideoItem(
+              this,
+              str.elementAt(i),
+              str.elementAt(i),
+            ),
           );
   }
 
@@ -51,9 +56,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 }
 
 class VideoItem extends StatelessWidget {
-  String videoName = "";
-  String videoId = "";
-  _HistoryScreenState parent;
+  final String videoName;
+  final videoId;
+  final _HistoryScreenState parent;
   VideoItem(this.parent, this.videoName, this.videoId);
 
   static const List<String> choices = <String>[
@@ -66,15 +71,24 @@ class VideoItem extends StatelessWidget {
     Icon(
       FontAwesomeIcons.filePdf,
       color: Colors.white,
+      size: 20,
     ),
-    Icon(FontAwesomeIcons.trash, color: Colors.white),
-    Icon(FontAwesomeIcons.play, color: Colors.white)
+    Icon(
+      FontAwesomeIcons.trash,
+      color: Colors.white,
+      size: 20,
+    ),
+    Icon(
+      FontAwesomeIcons.play,
+      color: Colors.white,
+      size: 20,
+    )
   ];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.only(bottom: 25),
       child: Container(
         decoration: BoxDecoration(color: DeepfakeColors.cardBackground),
         child: Row(
@@ -93,38 +107,39 @@ class VideoItem extends StatelessWidget {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: PopupMenuButton<String>(
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                    ),
-                    color: Colors.black,
-                    itemBuilder: (BuildContext context) {
-                      return choices.map((String choice) {
-                        int n = choices.indexOf(choice);
-                        return PopupMenuItem<String>(
-                            value: choice,
-                            child: GestureDetector(
-                              onTap: () {
-                                debugPrint(
-                                    choice + " for Button " + this.videoId);
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: icons[n],
-                                  ),
-                                  Text(
-                                    choice,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ));
-                      }).toList();
-                    }))
+              padding: const EdgeInsets.only(right: 8.0),
+              child: PopupMenuButton<String>(
+                onSelected: (value) =>
+                    print(value + " for Button " + this.videoId),
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                ),
+                color: Colors.black,
+                itemBuilder: (BuildContext context) {
+                  return choices.map(
+                    (String choice) {
+                      int n = choices.indexOf(choice);
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 12.0),
+                              child: icons[n],
+                            ),
+                            Text(
+                              choice,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList();
+                },
+              ),
+            )
           ],
         ),
       ),
