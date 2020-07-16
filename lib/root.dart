@@ -38,6 +38,15 @@ class _RootState extends State<Root> {
     });
   }
 
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,10 +54,13 @@ class _RootState extends State<Root> {
           ? LoginScreen()
           : Scaffold(
               body: screens[_currentIndex],
-              backgroundColor: DeepfakeColors.background,
+              backgroundColor:
+                  isDark ? DeepfakeColors.background : Colors.white,
               appBar: DeepfakeAppBar(
-                title: titles[_currentIndex],
-              ),
+                  title: titles[_currentIndex],
+                  onChange: () {
+                    this.setState(() {});
+                  }),
               bottomNavigationBar: BottomNavigationBar(
                 selectedItemColor: Colors.white,
                 unselectedItemColor: Colors.grey[300],

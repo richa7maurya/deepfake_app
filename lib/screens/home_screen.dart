@@ -1,6 +1,7 @@
 import 'package:deepfake_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import "package:deepfake_app/globals.dart";
 
 class HomeScreen extends StatefulWidget {
   final Function callback;
@@ -34,14 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DeepfakeColors.background,
+      backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Card(
-                color: DeepfakeColors.cardBackground,
+                color: isDark ? DeepfakeColors.cardBackground : Colors.white,
                 child: Column(
                   children: [
                     Container(
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               'What are we solving?',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: isDark ? Colors.white : Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               'Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: isDark ? Colors.white : Colors.black,
                                 fontSize: 16,
                               ),
                             ),

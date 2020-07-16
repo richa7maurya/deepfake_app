@@ -1,23 +1,24 @@
 import 'package:deepfake_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:deepfake_app/globals.dart';
 
 class DeepfakeAppBar extends StatefulWidget implements PreferredSizeWidget {
   DeepfakeAppBar({
     Key key,
+    @required this.onChange,
     @required this.title,
   }) : super(key: key);
 
   final String title;
+  final Function onChange;
 
   @override
-  _DeepfakeAppBarState createState() => _DeepfakeAppBarState();
+  _DeepfakeAppBarState createState() => _DeepfakeAppBarState(this.onChange);
 
   @override
   Size get preferredSize => Size.fromHeight(56);
 }
-
-bool isDark = true;
 
 class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   final options = [
@@ -37,6 +38,19 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
       ),
     ),
   ];
+
+  Function onChange;
+  _DeepfakeAppBarState(this.onChange);
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -44,15 +58,17 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
       backgroundColor: Colors.transparent,
       title: Text(
         widget.title,
+        style: TextStyle(color: isDark ? Colors.white : Colors.black),
       ),
       actions: [
         PopupMenuButton<dynamic>(
           tooltip: 'Settings',
-          color: Colors.black,
+          color: isDark ? Colors.black : Colors.white,
           onSelected: (value) {
             if (value.runtimeType.toString() == 'ThemeChanger') {
               setState(() {
                 isDark = !isDark;
+                this.onChange();
               });
             }
           },
@@ -67,6 +83,7 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
           icon: Icon(
             FontAwesomeIcons.cog,
             size: 20,
+            color: isDark ? Colors.white : Colors.black,
           ),
         )
       ],
@@ -91,10 +108,11 @@ class _ThemeChangerState extends State<ThemeChanger> {
       children: [
         Text(
           "Theme",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: isDark ? Colors.white : Colors.black),
         ),
         Icon(
           isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
+          color: isDark ? Colors.white : Colors.black,
         )
       ],
     );

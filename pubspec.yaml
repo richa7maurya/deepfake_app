@@ -20,8 +20,14 @@ dependencies:
     youtube_player_flutter:
     image_picker:
     chewie:
+    url_launcher:
+    file_picker:
+    requests:
+    dio:
 
 flutter:
+    assets:
+        - assets/
     uses-material-design: true
     fonts:
         - family: Poppins

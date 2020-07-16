@@ -2,6 +2,7 @@ import 'package:deepfake_app/colors.dart';
 import 'package:deepfake_app/components/wave_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:deepfake_app/globals.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -111,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               onPressed: () {
+                loggedIn = !loggedIn;
                 setState(() {
                   isLogin = !isLogin;
                   _formKey.currentState.reset();

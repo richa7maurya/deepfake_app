@@ -1,6 +1,7 @@
 import 'package:deepfake_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:deepfake_app/globals.dart';
 
 class HistoryScreen extends StatefulWidget {
   @override
@@ -61,26 +62,26 @@ class VideoItem extends StatelessWidget {
   final _HistoryScreenState parent;
   VideoItem(this.parent, this.videoName, this.videoId);
 
-  static const List<String> choices = <String>[
+  final List<String> choices = <String>[
     "Generate PDF Report",
     "Delete Video History",
     "Play Classified Video"
   ];
 
-  static const List<Icon> icons = <Icon>[
+  final List<Icon> icons = <Icon>[
     Icon(
       FontAwesomeIcons.filePdf,
-      color: Colors.white,
+      color: isDark ? Colors.white : Colors.black,
       size: 20,
     ),
     Icon(
       FontAwesomeIcons.trash,
-      color: Colors.white,
+      color: isDark ? Colors.white : Colors.black,
       size: 20,
     ),
     Icon(
       FontAwesomeIcons.play,
-      color: Colors.white,
+      color: isDark ? Colors.white : Colors.black,
       size: 20,
     )
   ];
@@ -90,7 +91,8 @@ class VideoItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 25),
       child: Container(
-        decoration: BoxDecoration(color: DeepfakeColors.cardBackground),
+        decoration: BoxDecoration(
+            color: isDark ? DeepfakeColors.cardBackground : Colors.black12),
         child: Row(
           children: <Widget>[
             Padding(
@@ -100,7 +102,7 @@ class VideoItem extends StatelessWidget {
                 child: Text(
                   this.videoName,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: isDark ? Colors.white : Colors.black,
                     fontSize: 16,
                   ),
                 ),
@@ -113,9 +115,9 @@ class VideoItem extends StatelessWidget {
                     print(value + " for Button " + this.videoId),
                 icon: Icon(
                   Icons.more_vert,
-                  color: Colors.white,
+                  color: isDark ? Colors.white : Colors.black,
                 ),
-                color: Colors.black,
+                color: isDark ? Colors.black : Colors.white,
                 itemBuilder: (BuildContext context) {
                   return choices.map(
                     (String choice) {
@@ -130,7 +132,8 @@ class VideoItem extends StatelessWidget {
                             ),
                             Text(
                               choice,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black),
                             ),
                           ],
                         ),
