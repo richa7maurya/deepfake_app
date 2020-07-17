@@ -64,36 +64,41 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
     Dio dio = new Dio();
 
     if (stats.size < MaxFileSizeinMB * 1024 * 1024) {
-      FormData formData = new FormData();
-      formData.fields.add(MapEntry("userId", "5f0ec570dc8e2b3f885b2bd6"));
-      formData.files
-          .add(MapEntry("video", await MultipartFile.fromFile(file.path)));
+      if (file.path.split(".")[1] == "mp4") {
+        FormData formData = new FormData();
+        formData.fields.add(MapEntry("userId", userId));
+        formData.files
+            .add(MapEntry("video", await MultipartFile.fromFile(file.path)));
 
-      Options options = new Options(
-          contentType: "form-data",
-          headers: {'Authorization': 'Bearer ' + BearerToken});
+        Options options = new Options(
+            contentType: "form-data",
+            headers: {'Authorization': 'Bearer ' + BearerToken});
 
-      response = await dio.post(ServerUrl + "/classify",
-          data: formData, options: options);
+        response = await dio.post(ServerUrl + "/classify",
+            data: formData, options: options);
 
-      print("-------------------------");
-      print(response.statusCode);
-      print(response);
-      print("-------------------------");
+        print("-------------------------");
+        print(response.statusCode);
+        print(response);
+        print("-------------------------");
 
-      if (response.statusCode == 200) {
-        text =
-            "Your video has been sent for classification. You'll see the results in your History.";
-      } else if (response.statusCode == 412 || response.statusCode == 413) {
-        text = "Max permissible file size/video length exceeded!";
-      } else if (response.statusCode == 400) {
-        text = "Unexpected issue with file";
-      } else if (response.statusCode == 422) {
-        text = "No video codec found";
-      } else if (response.statusCode == 429) {
-        text = "Too many videos sent for classification within short duration";
+        if (response.statusCode == 200) {
+          text =
+              "Your video has been sent for classification. You'll see the results in your History.";
+        } else if (response.statusCode == 412 || response.statusCode == 413) {
+          text = "Max permissible file size/video length exceeded!";
+        } else if (response.statusCode == 400) {
+          text = "Unexpected issue with file";
+        } else if (response.statusCode == 422) {
+          text = "No video codec found";
+        } else if (response.statusCode == 429) {
+          text =
+              "Too many videos sent for classification within short duration";
+        } else {
+          text = "Unknown error occured. Try again later!";
+        }
       } else {
-        text = "Unknown error occured. Try again later!";
+        text = "Image files not supported yet";
       }
     } else {
       text = "Max permissible file size/video length exceeded!";
@@ -188,7 +193,9 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
                     ),
                   ),
                 )
-              : CircularProgressIndicator()
+              : CircularProgressIndicator(
+                  valueColor:
+                      new AlwaysStoppedAnimation<Color>(DeepfakeColors.primary))
         ],
       ),
     );

@@ -15,15 +15,6 @@ class _AboutScreenState extends State<AboutScreen> {
   _AboutScreenState() {
     this.team = [
       {
-        "name": "Sakshi Doshi",
-        "designation": "Team Leader",
-        "img": "sakshi.jpeg",
-        "github": "SaShaShady",
-        "linkedin": "sakshi-doshi-84b899a3",
-        "quote": "default",
-        "quoteHeight": 24.0
-      },
-      {
         "name": "Akash Lende",
         "designation": "Full Stack Developer",
         "img": "akash.jpeg",
@@ -51,13 +42,22 @@ class _AboutScreenState extends State<AboutScreen> {
         "quoteHeight": 34.0
       },
       {
+        "name": "Sakshi Doshi",
+        "designation": "Team Leader",
+        "img": "sakshi.jpeg",
+        "github": "SaShaShady",
+        "linkedin": "sakshi-doshi-84b899a3",
+        "quote": "Be brave enough to be bad at something new",
+        "quoteHeight": 34.0
+      },
+      {
         "name": "Parag Ghorpade",
         "designation": "ML Developer",
         "img": "parag.jpeg",
         "github": "Parag0506",
         "linkedin": "parag-ghorpade",
-        "quote": "default",
-        "quoteHeight": 14.0
+        "quote": "Learning . . .  1 epoch at a time",
+        "quoteHeight": 34.0
       },
       {
         "name": "Hrishikesh Mane",
@@ -65,8 +65,8 @@ class _AboutScreenState extends State<AboutScreen> {
         "img": "mane.jpeg",
         "github": "hrishikeshmane",
         "linkedin": "hrishikesh-mane-755bab16a",
-        "quote": "default",
-        "quoteHeight": 14.0
+        "quote": "Kahi tak re😂",
+        "quoteHeight": 0.0
       },
     ];
   }

@@ -24,6 +24,9 @@ dependencies:
     file_picker:
     requests:
     dio:
+    flutter_downloader:
+    ext_storage:
+    permission_handler: ^3.1.0
 
 flutter:
     assets:
