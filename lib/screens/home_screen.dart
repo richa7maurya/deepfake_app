@@ -1,7 +1,7 @@
-import 'package:deepfake_app/colors.dart';
+import 'package:deepfake_app/blocs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import "package:deepfake_app/globals.dart";
 
 class HomeScreen extends StatefulWidget {
   final Function callback;
@@ -34,20 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Card(
-                color: isDark ? DeepfakeColors.cardBackground : Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Card(
+                elevation: 2,
+                color: _theme.cardColor,
                 child: Column(
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       height: MediaQuery.of(context).size.height / 2.5,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -56,16 +60,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: YoutubePlayer(
                               controller: _controller,
                               showVideoProgressIndicator: true,
-                              progressIndicatorColor: Colors.amber,
+                              progressIndicatorColor:
+                                  _theme.colorScheme.primary,
                               progressColors: ProgressBarColors(
-                                playedColor: DeepfakeColors.primary,
-                                handleColor: DeepfakeColors.secondary,
+                                playedColor: _theme.colorScheme.primary,
+                                handleColor: _theme.colorScheme.secondary,
                               ),
                             ),
                           ),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: DeepfakeColors.primary,
+                              color: _theme.colorScheme.primary,
                               width: 3,
                             ),
                             borderRadius: BorderRadius.circular(
@@ -87,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               'What are we solving?',
                               style: TextStyle(
-                                color: isDark ? Colors.white : Colors.black,
+                                color: _theme.colorScheme.onSurface,
                                 fontSize: 20,
                               ),
                             ),
@@ -99,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               'Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.',
                               style: TextStyle(
-                                color: isDark ? Colors.white : Colors.black,
+                                color: _theme.colorScheme.onSurface,
                                 fontSize: 16,
                               ),
                             ),
@@ -110,24 +115,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  color: DeepfakeColors.primary,
-                  onPressed: () => this.widget.callback(1),
-                  child: Text(
-                    'Start Classifying',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                color: _theme.colorScheme.primary,
+                onPressed: () => this.widget.callback(1),
+                child: Text(
+                  'Start Classifying',
+                  style: TextStyle(
+                    color: _theme.colorScheme.onPrimary,
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

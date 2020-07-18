@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:deepfake_app/colors.dart';
+import 'package:deepfake_app/blocs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Box extends StatelessWidget {
   final width, height, text;
@@ -109,13 +110,15 @@ class _WavePatternState extends State<WavePattern>
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return Stack(
       children: [
         ClipPath(
           child: Box(
             text: this.widget.text,
             opacity: backAnimation.value,
-            color: DeepfakeColors.background,
+            color: _theme.colorScheme.background,
             width: MediaQuery.of(context).size.width,
             height:
                 (MediaQuery.of(context).size.height * this.widget.heightRatio) *
@@ -127,7 +130,7 @@ class _WavePatternState extends State<WavePattern>
           child: Box(
             text: "",
             opacity: frontAnimation.value,
-            color: DeepfakeColors.primary,
+            color: _theme.colorScheme.primary,
             width: MediaQuery.of(context).size.width / 2.5,
             height: (MediaQuery.of(context).size.height *
                     this.widget.heightRatio *

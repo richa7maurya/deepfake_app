@@ -6,8 +6,9 @@ import 'package:deepfake_app/screens/history_screen.dart';
 import 'package:deepfake_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
-import 'colors.dart';
+import 'blocs/theme.dart';
 import 'screens/home_screen.dart';
 
 class Root extends StatefulWidget {
@@ -47,27 +48,45 @@ class _RootState extends State<Root> {
     (context as Element).visitChildren(rebuild);
   }
 
+  afterLogin(data) {
+    userId = data["id"];
+    bearerToken = data["token"];
+    name = data["name"];
+    loggedIn = !loggedIn;
+    setState(() {});
+  }
+
+  logout() {
+    userId = "";
+    bearerToken = "";
+    name = "";
+    loggedIn = !loggedIn;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return SafeArea(
       child: !loggedIn
-          ? LoginScreen()
+          ? LoginScreen(
+              callback: this.afterLogin,
+            )
           : Scaffold(
               body: screens[_currentIndex],
-              backgroundColor:
-                  isDark ? DeepfakeColors.background : Colors.white,
+              backgroundColor: _theme.colorScheme.background,
               appBar: DeepfakeAppBar(
-                  title: titles[_currentIndex],
-                  onChange: () {
-                    this.setState(() {});
-                  }),
+                title: titles[_currentIndex],
+                callback: this.logout,
+              ),
               bottomNavigationBar: BottomNavigationBar(
                 selectedItemColor: Colors.white,
                 unselectedItemColor: Colors.grey[300],
                 currentIndex: _currentIndex,
                 items: [
                   BottomNavigationBarItem(
-                    backgroundColor: DeepfakeColors.secondary,
+                    backgroundColor: _theme.colorScheme.secondary,
                     title: Text(
                       'Home',
                     ),
@@ -76,21 +95,21 @@ class _RootState extends State<Root> {
                     ),
                   ),
                   BottomNavigationBarItem(
-                    backgroundColor: DeepfakeColors.secondary,
+                    backgroundColor: _theme.colorScheme.secondary,
                     title: Text('Classify'),
                     icon: Icon(
                       FontAwesomeIcons.atom,
                     ),
                   ),
                   BottomNavigationBarItem(
-                    backgroundColor: DeepfakeColors.secondary,
+                    backgroundColor: _theme.colorScheme.secondary,
                     title: Text('History'),
                     icon: Icon(
                       FontAwesomeIcons.history,
                     ),
                   ),
                   BottomNavigationBarItem(
-                    backgroundColor: DeepfakeColors.secondary,
+                    backgroundColor: _theme.colorScheme.secondary,
                     title: Text('About Us'),
                     icon: Icon(
                       FontAwesomeIcons.users,

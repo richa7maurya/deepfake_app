@@ -1,46 +1,48 @@
+import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:deepfake_app/globals.dart';
+import 'package:provider/provider.dart';
 
 class DeepfakeAppBar extends StatefulWidget implements PreferredSizeWidget {
   DeepfakeAppBar({
     Key key,
-    @required this.onChange,
     @required this.title,
+    this.callback,
   }) : super(key: key);
 
   final String title;
-  final Function onChange;
+
+  final Function callback;
 
   @override
-  _DeepfakeAppBarState createState() => _DeepfakeAppBarState(this.onChange);
+  _DeepfakeAppBarState createState() => _DeepfakeAppBarState();
 
   @override
   Size get preferredSize => Size.fromHeight(56);
 }
 
+bool darkMode = true;
+
+class Logout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
+    return Text(
+      "Logout",
+      style: TextStyle(
+        color: _theme.colorScheme.onBackground,
+      ),
+    );
+  }
+}
+
 class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   final options = [
-    ThemeChanger(),
-    Center(
-      child: RaisedButton(
-        onPressed: () => print("Logout"),
-        color: DeepfakeColors.danger,
-        child: Text(
-          "Logout",
-          style: TextStyle(color: Colors.white),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: DeepfakeColors.danger),
-        ),
-      ),
-    ),
+    ThemeChangerWidget(),
+    Logout(),
   ];
-
-  Function onChange;
-  _DeepfakeAppBarState(this.onChange);
 
   void rebuildAllChildren(BuildContext context) {
     void rebuild(Element el) {
@@ -53,23 +55,31 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
         widget.title,
-        style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        style: TextStyle(
+          color: _theme.colorScheme.onBackground,
+        ),
       ),
       actions: [
         PopupMenuButton<dynamic>(
           tooltip: 'Settings',
-          color: isDark ? Colors.black : Colors.white,
+          color: _theme.colorScheme.surface,
           onSelected: (value) {
-            if (value.runtimeType.toString() == 'ThemeChanger') {
-              setState(() {
-                isDark = !isDark;
-                this.onChange();
-              });
+            if (value.runtimeType.toString() == 'ThemeChangerWidget') {
+              darkMode = !darkMode;
+              if (darkMode) {
+                _themeChanger.setTheme(DeepfakeTheme.darkTheme);
+              } else {
+                _themeChanger.setTheme(DeepfakeTheme.lightTheme);
+              }
+            } else {
+              this.widget.callback();
             }
           },
           itemBuilder: (context) {
@@ -83,7 +93,7 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
           icon: Icon(
             FontAwesomeIcons.cog,
             size: 20,
-            color: isDark ? Colors.white : Colors.black,
+            color: _theme.colorScheme.onBackground,
           ),
         )
       ],
@@ -91,28 +101,37 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   }
 }
 
-class ThemeChanger extends StatefulWidget {
-  const ThemeChanger({
+class ThemeChangerWidget extends StatefulWidget {
+  const ThemeChangerWidget({
     Key key,
   }) : super(key: key);
 
   @override
-  _ThemeChangerState createState() => _ThemeChangerState();
+  _ThemeChangerWidgetState createState() => _ThemeChangerWidgetState();
 }
 
-class _ThemeChangerState extends State<ThemeChanger> {
+class _ThemeChangerWidgetState extends State<ThemeChangerWidget> {
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           "Theme",
-          style: TextStyle(color: isDark ? Colors.white : Colors.black),
+          style: TextStyle(
+            color: _theme.colorScheme.onSurface,
+          ),
+        ),
+        SizedBox(
+          width: 1,
         ),
         Icon(
-          isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
-          color: isDark ? Colors.white : Colors.black,
+          _themeChanger.getTheme() == DeepfakeTheme.darkTheme
+              ? FontAwesomeIcons.moon
+              : FontAwesomeIcons.sun,
+          color: _theme.colorScheme.onSurface,
         )
       ],
     );

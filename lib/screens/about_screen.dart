@@ -1,6 +1,7 @@
-import 'package:deepfake_app/colors.dart';
+import 'package:deepfake_app/blocs/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:deepfake_app/globals.dart';
 
@@ -72,15 +73,19 @@ class _AboutScreenState extends State<AboutScreen> {
   }
   @override
   void initState() {
+    super.initState();
     for (int i = 0; i < this.team.length; i++) {
-      teamList.add(TeamCard(
-          this.team[i]["name"],
-          this.team[i]["designation"],
-          "https://github.com/" + this.team[i]["github"],
-          "https://www.linkedin.com/in/" + this.team[i]["linkedin"],
-          "assets/" + this.team[i]["img"],
-          this.team[i]["quote"],
-          this.team[i]["quoteHeight"]));
+      teamList.add(
+        TeamCard(
+            this.team[i]["name"],
+            this.team[i]["designation"],
+            "https://github.com/" + this.team[i]["github"],
+            "https://www.linkedin.com/in/" + this.team[i]["linkedin"],
+            "assets/" + this.team[i]["img"],
+            this.team[i]["quote"],
+            this.team[i]["quoteHeight"],
+            ''),
+      );
     }
   }
 
@@ -100,16 +105,24 @@ class _AboutScreenState extends State<AboutScreen> {
 }
 
 class TeamCard extends StatelessWidget {
-  var designation;
-  var github;
-  var name;
-  var linkedin;
-  var img;
-  var url;
-  var quote;
-  double quoteHeight;
-  TeamCard(this.name, this.designation, this.github, this.linkedin, this.img,
-      this.quote, this.quoteHeight);
+  final designation;
+  final github;
+  final name;
+  final linkedin;
+  final img;
+  final url;
+  final quote;
+  final quoteHeight;
+  TeamCard(
+    this.name,
+    this.designation,
+    this.github,
+    this.linkedin,
+    this.img,
+    this.quote,
+    this.quoteHeight,
+    this.url,
+  );
   _launchURL(String url) async {
     print(url);
     if (await canLaunch(url)) {
@@ -121,24 +134,31 @@ class TeamCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
       child: Card(
-        color: isDark ? DeepfakeColors.cardBackground : Colors.white,
+        elevation: 2,
+        color: _theme.cardColor,
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
               width: 125,
               height: 125,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                    width: 3,
-                    color: DeepfakeColors.primary,
-                    style: BorderStyle.solid),
+                  width: 3,
+                  color: _theme.colorScheme.primary,
+                  style: BorderStyle.solid,
+                ),
                 image: DecorationImage(
-                    image: AssetImage(this.img), fit: BoxFit.cover),
+                  image: AssetImage(this.img),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
@@ -151,14 +171,16 @@ class TeamCard extends StatelessWidget {
                     Text(
                       this.name,
                       style: TextStyle(
-                          color: isDark ? Colors.white : Colors.black,
-                          fontSize: 20),
+                        color: _theme.colorScheme.onSurface,
+                        fontSize: 20,
+                      ),
                     ),
                     Text(
                       this.designation,
                       style: TextStyle(
-                          color: isDark ? Colors.white : Colors.black,
-                          fontSize: 14),
+                        color: _theme.colorScheme.onSurface,
+                        fontSize: 14,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 2, bottom: 10),
@@ -172,7 +194,7 @@ class TeamCard extends StatelessWidget {
                               },
                               child: Icon(
                                 FontAwesomeIcons.github,
-                                color: isDark ? Colors.white : Colors.black,
+                                color: _theme.colorScheme.onSurface,
                                 size: 20,
                               ),
                             ),
@@ -185,7 +207,7 @@ class TeamCard extends StatelessWidget {
                               },
                               child: Icon(
                                 FontAwesomeIcons.linkedin,
-                                color: isDark ? Colors.white : Colors.black,
+                                color: _theme.colorScheme.onSurface,
                                 size: 20,
                               ),
                             ),
@@ -201,7 +223,7 @@ class TeamCard extends StatelessWidget {
                           child: Icon(
                             FontAwesomeIcons.quoteLeft,
                             size: 14,
-                            color: isDark ? Colors.white : Colors.black,
+                            color: _theme.colorScheme.onSurface,
                           ),
                         ),
                         Container(
@@ -211,7 +233,7 @@ class TeamCard extends StatelessWidget {
                             overflow: TextOverflow.visible,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: isDark ? Colors.white : Colors.black,
+                              color: _theme.colorScheme.onSurface,
                               fontSize: 14,
                             ),
                           ),
@@ -225,7 +247,7 @@ class TeamCard extends StatelessWidget {
                               child: Icon(
                                 FontAwesomeIcons.quoteRight,
                                 size: 14,
-                                color: isDark ? Colors.white : Colors.black,
+                                color: _theme.colorScheme.onSurface,
                               ),
                             ),
                           ),
