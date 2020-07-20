@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:deepfake_app/components/image_item.dart';
 import 'package:provider/provider.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -16,12 +17,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   var temp = 0;
   Dio dio = new Dio();
   bool isAPICalled = false;
-  List<String> videoNames = <String>[];
-  List<String> dates = <String>[];
-  List<String> statuses = <String>[];
-  List<String> videoId = <String>[];
+  List<Map<String, String>> videos = [];
+  List<Map<String, String>> images = [];
+
   List<Widget> historyList = [];
-  List<VideoItem> array;
 
   initializeDownloader() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -50,35 +49,67 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     List<dynamic> videos = response.data["vdata"];
     for (int i = 0; i < videos.length; i++) {
-      this.videoNames.add(videos[i]["fileName"]);
-      this.videoId.add(videos[i]["_id"]);
-      this.statuses.add(videos[i]["status"]);
-      this.dates.add(videos[i]["createdAt"]);
+      this.videos.add({
+        "type": "video",
+        "fileName": videos[i]["fileName"],
+        "_id": videos[i]["_id"],
+        "status": videos[i]["status"],
+        "createdAt": videos[i]["createdAt"]
+      });
     }
 
+    List<dynamic> images = response.data["idata"];
+    for (int i = 0; i < images.length; i++) {
+      this.images.add({
+        "type": "image",
+        "fileName": images[i]["fileName"],
+        "_id": images[i]["_id"],
+        "status": images[i]["status"],
+        "createdAt": images[i]["createdAt"]
+      });
+    }
+
+    List<Map<String, String>> history = [];
+    history = this.videos;
+    history.addAll(this.images);
+    history.sort((a, b) {
+      return DateTime.parse(b["createdAt"])
+          .difference(DateTime.parse(a["createdAt"]))
+          .inMilliseconds;
+    });
+
     this.setState(() {
-      for (int i = 0; i < videoNames.length; i++)
+      for (int i = 0; i < history.length; i++)
         this.historyList.add(
               Padding(
+                key: Key(history[i]["_id"]),
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).size.height * 0.015),
-                child: VideoItem(
-                  this.afterDelete,
-                  this.videoNames.elementAt(i),
-                  this.videoId.elementAt(i),
-                  this.statuses.elementAt(i),
-                  this.dates.elementAt(i),
-                ),
+                child: (history[i]["type"] == "video")
+                    ? VideoItem(
+                        this.afterDelete,
+                        history[i]["fileName"],
+                        history[i]["_id"],
+                        history[i]["status"],
+                        history[i]["createdAt"],
+                      )
+                    : ImageItem(
+                        this.afterDelete,
+                        history[i]["fileName"],
+                        history[i]["_id"],
+                        history[i]["status"],
+                        history[i]["createdAt"],
+                      ),
               ),
             );
+
       this.isAPICalled = true;
     });
   }
 
-  afterDelete() {
-    setState(() {
-      this.isAPICalled = false;
-      this.historyList = [];
+  afterDelete(String _id) {
+    this.setState(() {
+      this.historyList.removeWhere((element) => element.key == Key(_id));
     });
   }
 

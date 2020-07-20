@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:deepfake_app/colors.dart';
 import '../globals.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -149,12 +149,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeChanger _themeChanger = Provider.of(context);
-    ThemeData _theme = _themeChanger.getTheme();
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: _theme.colorScheme.primary,
+        backgroundColor: DeepfakeTheme.darkTheme.colorScheme.primary,
         onPressed: isLogin ? this.handleLogin : this.handleSignup,
         child: Icon(
           FontAwesomeIcons.chevronRight,
@@ -208,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               isLogin ? "Don't have an account?" : "Already have an account?",
               style: TextStyle(
-                color: _theme.colorScheme.background,
+                color: DeepfakeTheme.darkTheme.cardColor,
               ),
             ),
             FlatButton(
@@ -221,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isLogin ? 'Sign Up' : 'Login',
                       style: TextStyle(
                         fontSize: 24,
-                        color: _theme.colorScheme.background,
+                        color: DeepfakeTheme.darkTheme.cardColor,
                       ),
                     ),
                     SizedBox(
@@ -230,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Icon(
                       FontAwesomeIcons.arrowRight,
                       size: 16,
-                      color: _theme.colorScheme.background,
+                      color: DeepfakeTheme.darkTheme.cardColor,
                     )
                   ],
                 ),
@@ -278,8 +276,6 @@ class _OutlinedTextFormFieldState extends State<OutlinedTextFormField> {
   bool obscureText = true;
   @override
   Widget build(BuildContext context) {
-    ThemeChanger _themeChanger = Provider.of(context);
-    ThemeData _theme = _themeChanger.getTheme();
     return Padding(
       padding: const EdgeInsets.only(
         left: 24.0,
@@ -302,38 +298,39 @@ class _OutlinedTextFormFieldState extends State<OutlinedTextFormField> {
                       ? Icon(
                           this.widget.prefixIcon,
                           size: 18,
-                          color: _theme.colorScheme.background,
+                          color: DeepfakeTheme.darkTheme.cardColor,
                         )
                       : Icon(
                           obscureText
                               ? FontAwesomeIcons.eye
                               : FontAwesomeIcons.eyeSlash,
                           size: 18,
-                          color: _theme.colorScheme.background,
+                          color: DeepfakeTheme.darkTheme.cardColor,
                         ),
-                  color: _theme.colorScheme.secondary,
+                  color: DeepfakeTheme.darkTheme.cardColor,
                 )
               : null,
           hintStyle: TextStyle(
-            color: _theme.colorScheme.background.withOpacity(0.7),
+            color:
+                DeepfakeTheme.darkTheme.colorScheme.background.withOpacity(0.7),
           ),
           hintText: this.widget.hintText,
-          focusColor: _theme.colorScheme.secondary,
+          focusColor: DeepfakeTheme.darkTheme.colorScheme.secondary,
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: _theme.colorScheme.background,
+              color: DeepfakeTheme.darkTheme.colorScheme.background,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: _theme.colorScheme.secondary,
+              color: DeepfakeTheme.darkTheme.colorScheme.secondary,
               width: 2.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: _theme.colorScheme.error,
+              color: DeepfakeTheme.darkTheme.colorScheme.error,
               width: 2.0,
             ),
           ),

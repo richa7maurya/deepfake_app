@@ -57,46 +57,56 @@ class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      title: Text(
-        widget.title,
-        style: TextStyle(
-          color: _theme.colorScheme.onBackground,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            width: 3,
+            color: _theme.colorScheme.secondary,
+          ),
         ),
       ),
-      actions: [
-        PopupMenuButton<dynamic>(
-          tooltip: 'Settings',
-          color: _theme.colorScheme.surface,
-          onSelected: (value) {
-            if (value.runtimeType.toString() == 'ThemeChangerWidget') {
-              darkMode = !darkMode;
-              if (darkMode) {
-                _themeChanger.setTheme(DeepfakeTheme.darkTheme);
-              } else {
-                _themeChanger.setTheme(DeepfakeTheme.lightTheme);
-              }
-            } else {
-              this.widget.callback();
-            }
-          },
-          itemBuilder: (context) {
-            return options.map((choice) {
-              return PopupMenuItem(
-                value: choice,
-                child: choice,
-              );
-            }).toList();
-          },
-          icon: Icon(
-            FontAwesomeIcons.cog,
-            size: 20,
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          widget.title,
+          style: TextStyle(
             color: _theme.colorScheme.onBackground,
           ),
-        )
-      ],
+        ),
+        actions: [
+          PopupMenuButton<dynamic>(
+            tooltip: 'Settings',
+            color: _theme.colorScheme.surface,
+            onSelected: (value) {
+              if (value.runtimeType.toString() == 'ThemeChangerWidget') {
+                darkMode = !darkMode;
+                if (darkMode) {
+                  _themeChanger.setTheme(DeepfakeTheme.darkTheme);
+                } else {
+                  _themeChanger.setTheme(DeepfakeTheme.lightTheme);
+                }
+              } else {
+                this.widget.callback();
+              }
+            },
+            itemBuilder: (context) {
+              return options.map((choice) {
+                return PopupMenuItem(
+                  value: choice,
+                  child: choice,
+                );
+              }).toList();
+            },
+            icon: Icon(
+              FontAwesomeIcons.cog,
+              size: 20,
+              color: _theme.colorScheme.onBackground,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -42,7 +42,7 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
         chewieController = ChewieController(
           videoPlayerController: _videoPlayerController,
           autoPlay: true,
-          looping: true,
+          looping: false,
           materialProgressColors: ChewieProgressColors(
             playedColor: DeepfakeTheme.darkTheme.primaryColor,
           ),
@@ -197,7 +197,10 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
                   child: Container(
                     child: this.isVideo
                         ? Chewie(controller: chewieController)
-                        : Image.file(file),
+                        : Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.file(file),
+                          ),
                     height: MediaQuery.of(context).size.height / 2,
                     width: MediaQuery.of(context).size.height / 2,
                     decoration: BoxDecoration(

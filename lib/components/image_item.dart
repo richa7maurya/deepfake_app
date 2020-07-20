@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:chewie/chewie.dart';
 import 'package:deepfake_app/blocs/theme.dart';
-import 'package:deepfake_app/colors.dart';
 import 'package:deepfake_app/globals.dart';
 import 'package:deepfake_app/permissions.dart';
 import 'package:dio/dio.dart';
@@ -14,32 +12,27 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 bool downloaderInitialized = false;
 
-class VideoItem extends StatefulWidget {
-  final String videoName;
-  final videoId;
+class ImageItem extends StatefulWidget {
+  final String imageName;
+  final imageId;
   final status;
   final date;
   final Function callback;
 
-  VideoItem(
-      this.callback, this.videoName, this.videoId, this.status, this.date);
+  ImageItem(
+      this.callback, this.imageName, this.imageId, this.status, this.date);
 
   static var httpClient = new HttpClient();
 
   @override
-  _VideoItemState createState() => _VideoItemState();
+  _ImageItemState createState() => _ImageItemState();
 }
 
-class _VideoItemState extends State<VideoItem> {
-  VideoPlayerController _videoPlayerController;
-
-  ChewieController chewieController;
-
-  String videoFile = "";
+class _ImageItemState extends State<ImageItem> {
+  String imageFile = "";
 
   final Dio dio = new Dio();
 
@@ -47,70 +40,39 @@ class _VideoItemState extends State<VideoItem> {
 
   final List<String> choices = <String>[
     "Generate PDF Report",
-    "Delete Video",
-    "Play Video"
+    "Delete Image",
+    "Display Image"
   ];
 
   final icons = [
     FontAwesomeIcons.filePdf,
     FontAwesomeIcons.trash,
-    FontAwesomeIcons.play,
+    FontAwesomeIcons.image,
   ];
 
   @override
   initState() {
     super.initState();
     initializeDateFormatting('en_IN', null);
-    this.getVideoPath();
+    this.getImagePath();
   }
 
-  getVideoPath() async {
+  getImagePath() async {
+    print("get image path");
+
     Options options = new Options(
         contentType: "application/json",
         headers: {'Authorization': 'Bearer ' + bearerToken});
 
     Map<String, String> query = {
       "userId": userId,
-      "videoId": this.widget.videoId
+      "imageId": this.widget.imageId
     };
+    var res = await dio.get(serverURL + "/get-image",
+        queryParameters: query, options: options);
 
-    try {
-      final response = await dio.get(
-        serverURL + "/get-video",
-        queryParameters: query,
-        options: options,
-      );
-      videoFile = response.data["videoFile"];
-    } on DioError catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          ThemeChanger _themeChanger = Provider.of(context);
-          ThemeData _theme = _themeChanger.getTheme();
-          return AlertDialog(
-            backgroundColor: _theme.colorScheme.surface,
-            content: Text(
-              'Oops! Something went wrong displaying your video',
-              style: TextStyle(
-                color: _theme.colorScheme.onSurface,
-              ),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: Text(
-                  "Ok",
-                  style: TextStyle(
-                    color: _theme.colorScheme.onSurface,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+    if (res.statusCode == 200) {
+      this.imageFile = res.data["imageFile"];
     }
   }
 
@@ -120,16 +82,18 @@ class _VideoItemState extends State<VideoItem> {
       downloaderInitialized = !downloaderInitialized;
     }
     print("Generate PDF");
+
     Options options = new Options(
         contentType: "application/json",
         headers: {'Authorization': 'Bearer ' + bearerToken});
 
     Map<String, String> query = {
       "userId": userId,
-      "videoId": this.widget.videoId
+      "imageId": this.widget.imageId
     };
-    var res = await dio.get(serverURL + "/pdf",
+    var res = await dio.get(serverURL + "/pdf-image",
         queryParameters: query, options: options);
+
     if (res.statusCode == 200) {
       await this.service.requestStoragePermission();
       await ExtStorage.getExternalStoragePublicDirectory(
@@ -141,36 +105,29 @@ class _VideoItemState extends State<VideoItem> {
             showNotification: true,
             openFileFromNotification: true,
             fileName: "Report-" +
-                this.widget.videoName.split(".")[0] +
+                this.widget.imageName.split(".")[0] +
                 "-" +
                 res.data["report"]);
       });
     }
   }
 
-  deleteVideo() async {
-    print("Delete Video");
+  deleteImage() async {
+    print("Delete Image");
     Options options = new Options(
-        contentType: "application/json",
+        contentType: "application/x-www-form-urlencoded",
         headers: {'Authorization': 'Bearer ' + bearerToken});
 
-    Map<String, String> data = {
-      "userId": userId,
-      "videoId": this.widget.videoId
-    };
+    Map data = {"userId": userId, "imageId": this.widget.imageId};
+    var response = await dio.post(serverURL + "/remove/image",
+        data: data, options: options);
 
     String text = "";
-    try {
-      final response = await dio.post(serverURL + '/remove/video',
-          data: data, options: options);
-
-      if (response.data["success"]) {
-        text = "Deletion Successful";
-      }
-    } on DioError catch (e) {
-      text = "Oops! Something went wrong. Could not delete video.";
+    if (response.statusCode == 200) {
+      text = "Deletion Successful";
+    } else {
+      text = "Oops! Something went wrong. Could not delete image.";
     }
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -200,10 +157,10 @@ class _VideoItemState extends State<VideoItem> {
         );
       },
     );
-    this.widget.callback(this.widget.videoId);
+    this.widget.callback(this.widget.imageId);
   }
 
-  downloadVideo() async {
+  downloadImage() async {
     if (!downloaderInitialized) {
       await FlutterDownloader.initialize(debug: true);
       downloaderInitialized = !downloaderInitialized;
@@ -215,41 +172,21 @@ class _VideoItemState extends State<VideoItem> {
             ExtStorage.DIRECTORY_DOWNLOADS)
         .then((value) async {
       await FlutterDownloader.enqueue(
-          url:
-              serverURL + "/get-video/video?videoFile=${this.widget.videoName}",
+          url: serverURL + "/get-image/image?imageFile=${this.imageFile}",
           savedDir: value,
           showNotification: true,
           openFileFromNotification: true,
           fileName:
-              "Classified-" + this.widget.videoName.split(".")[0] + ".mp4");
+              "Classified-" + this.widget.imageName.split(".")[0] + ".jpg");
     });
   }
 
   @override
   dispose() {
-    if (_videoPlayerController != null) _videoPlayerController.dispose();
-    if (chewieController != null) chewieController.dispose();
     super.dispose();
   }
 
-  playVideo() {
-    print("Play video");
-    print(Localizations.localeOf(context).languageCode +
-        '_' +
-        Localizations.localeOf(context).countryCode);
-
-    _videoPlayerController = VideoPlayerController.network(
-        serverURL + '/get-video/video?videoFile=' + videoFile);
-
-    chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: true,
-      looping: false,
-      materialProgressColors: ChewieProgressColors(
-        playedColor: DeepfakeTheme.darkTheme.primaryColor,
-      ),
-    );
-
+  displayImage() {
     showBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -262,50 +199,63 @@ class _VideoItemState extends State<VideoItem> {
           color: _theme.cardColor,
           child: Column(
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: _theme.colorScheme.primary,
-                        width: 3,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.all(
-                      MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    child: Center(
-                      child: Chewie(
-                        controller: chewieController,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                      top: 10,
-                      right: 0,
-                      child: FlatButton(
-                        onPressed: this.downloadVideo,
+              (this.imageFile != "")
+                  ? Stack(children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _theme.colorScheme.primary,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.01,
+                        ),
                         child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _theme.colorScheme.primary),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Icon(FontAwesomeIcons.arrowDown,
-                                  color: Colors.white),
-                            )),
-                      )),
-                ],
-              ),
+                          width: MediaQuery.of(context).size.width,
+                          child: Image.network(
+                            serverURL +
+                                "/get-image/image?imageFile=${this.imageFile}",
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          top: 10,
+                          right: 0,
+                          child: FlatButton(
+                            onPressed: this.downloadImage,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _theme.colorScheme.primary),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Icon(FontAwesomeIcons.arrowDown,
+                                      color: Colors.white),
+                                )),
+                          )),
+                    ])
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 40.0, top: 20),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          'No face(s) detected in the image.',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: _theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'File name - ' + this.widget.videoName,
+                  'File name - ' + this.widget.imageName,
                   style: TextStyle(
                     fontSize: 20,
                     color: _theme.colorScheme.onSurface,
@@ -314,7 +264,6 @@ class _VideoItemState extends State<VideoItem> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
@@ -327,7 +276,6 @@ class _VideoItemState extends State<VideoItem> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
@@ -357,7 +305,10 @@ class _VideoItemState extends State<VideoItem> {
     return Card(
       elevation: 2,
       child: Container(
-        decoration: BoxDecoration(color: _theme.cardColor),
+        decoration: BoxDecoration(
+          color: _theme.cardColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Row(
           children: <Widget>[
             Padding(
@@ -366,7 +317,7 @@ class _VideoItemState extends State<VideoItem> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: Text(
-                  this.widget.videoName,
+                  this.widget.imageName,
                   style: TextStyle(
                     color: _theme.colorScheme.onSurface,
                     fontSize: 16,
@@ -379,8 +330,8 @@ class _VideoItemState extends State<VideoItem> {
                 if (value == "0")
                   this.generatePDF();
                 else if (value == "1")
-                  this.deleteVideo();
-                else if (value == "2") this.playVideo();
+                  this.deleteImage();
+                else if (value == "2") this.displayImage();
               },
               icon: Icon(
                 Icons.more_vert,

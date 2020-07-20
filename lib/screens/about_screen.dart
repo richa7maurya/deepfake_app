@@ -16,6 +16,15 @@ class _AboutScreenState extends State<AboutScreen> {
   _AboutScreenState() {
     this.team = [
       {
+        "name": "Sakshi Doshi",
+        "designation": "Team Leader",
+        "img": "sakshi.jpeg",
+        "github": "SaShaShady",
+        "linkedin": "sakshi-doshi-84b899a3",
+        "quote": "Be brave enough to be bad at something new",
+        "quoteHeight": 34.0
+      },
+      {
         "name": "Akash Lende",
         "designation": "Full Stack Developer",
         "img": "akash.jpeg",
@@ -30,7 +39,7 @@ class _AboutScreenState extends State<AboutScreen> {
         "img": "richa.jpg",
         "github": "richa7maurya",
         "linkedin": "richa7maurya",
-        "quote": "Trust the Process 💙",
+        "quote": "Trust the Process ☮",
         "quoteHeight": 0.0
       },
       {
@@ -43,21 +52,12 @@ class _AboutScreenState extends State<AboutScreen> {
         "quoteHeight": 34.0
       },
       {
-        "name": "Sakshi Doshi",
-        "designation": "Team Leader",
-        "img": "sakshi.jpeg",
-        "github": "SaShaShady",
-        "linkedin": "sakshi-doshi-84b899a3",
-        "quote": "Be brave enough to be bad at something new",
-        "quoteHeight": 34.0
-      },
-      {
         "name": "Parag Ghorpade",
         "designation": "ML Developer",
         "img": "parag.jpeg",
         "github": "Parag0506",
         "linkedin": "parag-ghorpade",
-        "quote": "Learning . . .  1 epoch at a time",
+        "quote": "Learning . . .  1 epoch at a time ⏳",
         "quoteHeight": 34.0
       },
       {
@@ -66,8 +66,8 @@ class _AboutScreenState extends State<AboutScreen> {
         "img": "mane.jpeg",
         "github": "hrishikeshmane",
         "linkedin": "hrishikesh-mane-755bab16a",
-        "quote": "Kahi tak re😂",
-        "quoteHeight": 0.0
+        "quote": "Struggling for extra cloud credits ☁💸",
+        "quoteHeight": 34.0
       },
     ];
   }
