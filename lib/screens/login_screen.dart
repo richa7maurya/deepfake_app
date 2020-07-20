@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool showPassword = false;
   bool isLogin = true;
   Dio dio = new Dio();
   TextEditingController nameController,
@@ -27,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     usernameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    this.showPassword = false;
 
     super.initState();
   }
@@ -166,39 +168,122 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  if (!isLogin)
-                    OutlinedTextFormField(
-                      controller: emailController,
-                      hintText: 'Enter Email',
-                      prefixIcon: FontAwesomeIcons.envelope,
-                      validationMessage: 'Please enter your email',
-                      isPassword: false,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 22.0, left: 22.0),
+                child: Column(
+                  children: [
+                    if (!isLogin)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 18),
+                            border: const OutlineInputBorder(),
+                            enabledBorder: const OutlineInputBorder(),
+                            hintText: 'Enter Email',
+                            prefixIcon: Icon(FontAwesomeIcons.envelope),
+                          ),
+                          controller: emailController,
+                          validator: (value) {
+                            print(value);
+                            if (RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value))
+                              return null;
+                            else
+                              return "Enter valid Email id";
+                          },
+                        ),
+                      ),
+                    if (!isLogin)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 18),
+                            border: const OutlineInputBorder(),
+                            enabledBorder: const OutlineInputBorder(),
+                            hintText: 'Enter Full Name',
+                            prefixIcon: Icon(FontAwesomeIcons.pencilAlt),
+                          ),
+                          controller: nameController,
+                          validator: (value) {
+                            print(value);
+                            if (value.split(' ').contains(''))
+                              return "Enter valid name";
+                            else if (RegExp(r"^[A-Za-z\\s]+").hasMatch(value))
+                              return null;
+                            else
+                              return "Only letters and spaces allowed";
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14.0),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 18),
+                          border: const OutlineInputBorder(),
+                          enabledBorder: const OutlineInputBorder(),
+                          hintText: 'Enter Username',
+                          prefixIcon: Icon(FontAwesomeIcons.user),
+                        ),
+                        controller: usernameController,
+                        validator: (value) {
+                          print(value);
+                          if (value.split(' ').contains(''))
+                            return "Enter valid username";
+                          else
+                            return null;
+                        },
+                      ),
                     ),
-                  if (!isLogin)
-                    OutlinedTextFormField(
-                      controller: nameController,
-                      hintText: 'Enter Full Name',
-                      prefixIcon: FontAwesomeIcons.pencilAlt,
-                      validationMessage: 'Please enter your full name',
-                      isPassword: false,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14.0),
+                      child: TextFormField(
+                        obscureText: !this.showPassword,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 18),
+                          border: const OutlineInputBorder(),
+                          enabledBorder: const OutlineInputBorder(),
+                          hintText: 'Enter Password',
+                          prefixIcon: IconButton(
+                              icon: Icon((this.showPassword)
+                                  ? FontAwesomeIcons.eyeSlash
+                                  : FontAwesomeIcons.eye),
+                              onPressed: () {
+                                this.setState(() {
+                                  this.showPassword = !this.showPassword;
+                                });
+                              }),
+                        ),
+                        controller: passwordController,
+                        validator: (value) {
+                          print(value);
+                          if (value.contains(" "))
+                            return "No spaces allowed";
+                          else if (RegExp(
+                                  r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+                              .hasMatch(value))
+                            return null;
+                          else {
+                            print(value.length);
+                            if (!RegExp(r"[A-Z]+").hasMatch(value))
+                              return "Password must contain atleast 1 Uppercase Letter";
+                            else if (!RegExp(r"[a-z]+").hasMatch(value))
+                              return "Password must contain atleast 1 Lowercase Letter";
+                            else if (value.length < 8)
+                              return "Length of password should be atleast 8 letter";
+                            else if (!RegExp(r"[0-9]+").hasMatch(value))
+                              return "Password must contain atleast 1 number";
+                            else
+                              return "Password must contain atleast 1 special symbol";
+                          }
+                        },
+                      ),
                     ),
-                  OutlinedTextFormField(
-                    controller: usernameController,
-                    prefixIcon: FontAwesomeIcons.user,
-                    hintText: 'Enter Username',
-                    validationMessage: 'Please enter your username',
-                    isPassword: false,
-                  ),
-                  OutlinedTextFormField(
-                    controller: passwordController,
-                    hintText: 'Enter Password',
-                    prefixIcon: FontAwesomeIcons.eye,
-                    validationMessage: 'Please enter your password',
-                    isPassword: true,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Text(
@@ -208,36 +293,35 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             FlatButton(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      isLogin ? 'Sign Up' : 'Login',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: DeepfakeTheme.darkTheme.cardColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        isLogin ? 'Sign Up' : 'Login',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: DeepfakeTheme.darkTheme.cardColor,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Icon(
-                      FontAwesomeIcons.arrowRight,
-                      size: 16,
-                      color: DeepfakeTheme.darkTheme.cardColor,
-                    )
-                  ],
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        FontAwesomeIcons.arrowRight,
+                        size: 16,
+                        color: DeepfakeTheme.darkTheme.cardColor,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              onPressed: () {
-                setState(() {
-                  isLogin = !isLogin;
-                  _formKey.currentState.reset();
-                });
-              },
-            ),
+                onPressed: () {
+                  setState(() {
+                    isLogin = !isLogin;
+                    _formKey.currentState.reset();
+                  });
+                }),
             SizedBox(
               height: 20,
             )
