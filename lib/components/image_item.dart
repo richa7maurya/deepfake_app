@@ -53,7 +53,7 @@ class _ImageItemState extends State<ImageItem> {
   @override
   initState() {
     super.initState();
-    initializeDateFormatting('en_IN', null);
+    print(DateTime.now().timeZoneOffset);
     this.getImagePath();
   }
 
@@ -281,9 +281,13 @@ class _ImageItemState extends State<ImageItem> {
                 child: Text(
                   'Date - ' +
                       new DateFormat.yMd(
-                        'en_IN',
+                        Localizations.localeOf(context).languageCode +
+                            '_' +
+                            Localizations.localeOf(context).countryCode,
                       ).add_jm().format(
-                            DateTime.parse(this.widget.date),
+                            DateTime.parse(this.widget.date).add(
+                              DateTime.now().timeZoneOffset,
+                            ),
                           ),
                   style: TextStyle(
                     fontSize: 20,
