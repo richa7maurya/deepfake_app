@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:deepfake_app/blocs/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:deepfake_app/colors.dart';
 
 class Box extends StatelessWidget {

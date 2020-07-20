@@ -82,35 +82,36 @@ class _VideoItemState extends State<VideoItem> {
       );
       videoFile = response.data["videoFile"];
     } on DioError catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          ThemeChanger _themeChanger = Provider.of(context);
-          ThemeData _theme = _themeChanger.getTheme();
-          return AlertDialog(
-            backgroundColor: _theme.colorScheme.surface,
-            content: Text(
-              'Oops! Something went wrong displaying your video',
-              style: TextStyle(
-                color: _theme.colorScheme.onSurface,
-              ),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: Text(
-                  "Ok",
-                  style: TextStyle(
-                    color: _theme.colorScheme.onSurface,
-                  ),
+      if (e.response.statusCode != 200)
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            ThemeChanger _themeChanger = Provider.of(context);
+            ThemeData _theme = _themeChanger.getTheme();
+            return AlertDialog(
+              backgroundColor: _theme.colorScheme.surface,
+              content: Text(
+                'Oops! Something went wrong displaying your video',
+                style: TextStyle(
+                  color: _theme.colorScheme.onSurface,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
               ),
-            ],
-          );
-        },
-      );
+              actions: <Widget>[
+                new FlatButton(
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(
+                      color: _theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
     }
   }
 
@@ -168,7 +169,8 @@ class _VideoItemState extends State<VideoItem> {
         text = "Deletion Successful";
       }
     } on DioError catch (e) {
-      text = "Oops! Something went wrong. Could not delete video.";
+      if (e.response.statusCode != 200)
+        text = "Oops! Something went wrong. Could not delete video.";
     }
 
     showDialog(

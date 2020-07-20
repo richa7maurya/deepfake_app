@@ -1,11 +1,8 @@
-import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/colors.dart';
 import 'package:deepfake_app/components/wave_pattern.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:deepfake_app/colors.dart';
 import '../globals.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -116,33 +113,34 @@ class _LoginScreenState extends State<LoginScreen> {
           this.handleLogin();
         }
       } on DioError catch (e) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: DeepfakeTheme.lightTheme.colorScheme.surface,
-              content: Text(
-                'Oops! This username is taken.',
-                style: TextStyle(
-                  color: DeepfakeTheme.lightTheme.colorScheme.onSurface,
-                ),
-              ),
-              actions: <Widget>[
-                new FlatButton(
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(
-                      color: DeepfakeTheme.lightTheme.colorScheme.onSurface,
-                    ),
+        if (e.response.statusCode != 200)
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: DeepfakeTheme.lightTheme.colorScheme.surface,
+                content: Text(
+                  'Oops! This username is taken.',
+                  style: TextStyle(
+                    color: DeepfakeTheme.lightTheme.colorScheme.onSurface,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
                 ),
-              ],
-            );
-          },
-        );
+                actions: <Widget>[
+                  new FlatButton(
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(
+                        color: DeepfakeTheme.lightTheme.colorScheme.onSurface,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
       }
     }
   }

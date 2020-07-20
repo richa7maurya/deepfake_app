@@ -26,6 +26,10 @@ class _RootState extends State<Root> {
     AboutScreen(),
   ];
 
+  final controller = PageController(
+    initialPage: 0,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +78,15 @@ class _RootState extends State<Root> {
               callback: this.afterLogin,
             )
           : Scaffold(
-              body: screens[_currentIndex],
+              body: PageView(
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: screens,
+                controller: controller,
+              ),
               backgroundColor: _theme.colorScheme.background,
               appBar: DeepfakeAppBar(
                 title: titles[_currentIndex],
@@ -117,6 +129,9 @@ class _RootState extends State<Root> {
                   ),
                 ],
                 onTap: (index) {
+                  if (Navigator.of(context).canPop())
+                    Navigator.of(context).pop();
+                  controller.jumpToPage(index);
                   setState(() {
                     _currentIndex = index;
                   });
