@@ -215,8 +215,7 @@ class _VideoItemState extends State<VideoItem> {
             ExtStorage.DIRECTORY_DOWNLOADS)
         .then((value) async {
       await FlutterDownloader.enqueue(
-          url:
-              serverURL + "/get-video/video?videoFile=${this.widget.videoName}",
+          url: serverURL + "/get-video/video?videoFile=${this.videoFile}",
           savedDir: value,
           showNotification: true,
           openFileFromNotification: true,
@@ -357,7 +356,10 @@ class _VideoItemState extends State<VideoItem> {
     return Card(
       elevation: 2,
       child: Container(
-        decoration: BoxDecoration(color: _theme.cardColor),
+        decoration: BoxDecoration(
+          color: _theme.cardColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Row(
           children: <Widget>[
             Padding(
