@@ -17,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool showPassword = false;
   bool isLogin = true;
+  bool isApiCalled = false;
   Dio dio = new Dio();
+
   TextEditingController nameController,
       usernameController,
       emailController,
@@ -43,12 +45,16 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  handleLogin() async {
+  handleLogin(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       final username = usernameController.text;
       final password = passwordController.text;
 
       try {
+        this.setState(() {
+          this.isApiCalled = true;
+        });
+        this._showSnackbar(context, "Logging In ...");
         final response = await dio.post(
           '$serverURL/users/login',
           data: {
@@ -60,7 +66,15 @@ class _LoginScreenState extends State<LoginScreen> {
         if (response.data["success"]) {
           this.widget.callback(response.data);
         }
+        this.setState(() {
+          this.isApiCalled = false;
+        });
+        Scaffold.of(context).hideCurrentSnackBar();
       } on DioError catch (e) {
+        Scaffold.of(context).hideCurrentSnackBar();
+        this.setState(() {
+          this.isApiCalled = false;
+        });
         if (e.response.statusCode == 401) {
           showDialog(
             context: context,
@@ -94,13 +108,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  handleSignup() async {
+  handleSignup(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       final name = nameController.text;
       final email = emailController.text;
       final username = usernameController.text;
       final password = passwordController.text;
       try {
+        this.setState(() {
+          this.isApiCalled = true;
+        });
+        this._showSnackbar(context, "Signing Up ...");
         final res = await dio.post(
           '$serverURL/users/signup',
           data: {
@@ -112,9 +130,17 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         if (res.data["success"]) {
           // * Login the user automatically
-          this.handleLogin();
+          this.handleLogin(context);
         }
+        this.setState(() {
+          this.isApiCalled = false;
+        });
+        Scaffold.of(context).hideCurrentSnackBar();
       } on DioError catch (e) {
+        Scaffold.of(context).hideCurrentSnackBar();
+        this.setState(() {
+          this.isApiCalled = false;
+        });
         if (e.response.statusCode != 200)
           showDialog(
             context: context,
@@ -147,17 +173,61 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  _showSnackbar(BuildContext context, String text) {
+    final snackBar = SnackBar(
+      content: Container(
+          alignment: Alignment.centerLeft,
+          height: 30,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SizedBox(
+                  child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                      DeepfakeTheme.darkTheme.colorScheme.primary,
+                    ),
+                  ),
+                  height: 18.0,
+                  width: 18.0,
+                ),
+              ),
+              Text(
+                text,
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
+          )),
+      backgroundColor: DeepfakeTheme.darkTheme.colorScheme.background,
+      duration: Duration(days: 1),
+    );
+
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: DeepfakeTheme.darkTheme.colorScheme.primary,
-        onPressed: isLogin ? this.handleLogin : this.handleSignup,
-        child: Icon(
-          FontAwesomeIcons.chevronRight,
-          size: 16,
-        ),
+      floatingActionButton: Builder(
+        builder: (context) {
+          return Visibility(
+            visible: !this.isApiCalled,
+            child: FloatingActionButton(
+              backgroundColor: DeepfakeTheme.darkTheme.colorScheme.primary,
+              onPressed: () {
+                if (isLogin)
+                  this.handleLogin(context);
+                else
+                  this.handleSignup(context);
+              },
+              child: Icon(
+                FontAwesomeIcons.chevronRight,
+                size: 16,
+              ),
+            ),
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -327,102 +397,6 @@ class _LoginScreenState extends State<LoginScreen> {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class OutlinedTextFormField extends StatefulWidget {
-  const OutlinedTextFormField({
-    Key key,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.hintText,
-    this.validationMessage,
-    this.isPassword,
-    this.controller,
-  }) : super(key: key);
-
-  final prefixIcon,
-      suffixIcon,
-      hintText,
-      validationMessage,
-      isPassword,
-      controller;
-
-  @override
-  _OutlinedTextFormFieldState createState() => _OutlinedTextFormFieldState();
-}
-
-class _OutlinedTextFormFieldState extends State<OutlinedTextFormField> {
-  bool obscureText = true;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 24.0,
-        right: 24.0,
-        bottom: 24.0,
-      ),
-      child: TextFormField(
-        style: TextStyle(color: Colors.black),
-        controller: this.widget.controller,
-        obscureText: obscureText && this.widget.isPassword,
-        decoration: InputDecoration(
-          prefixIcon: this.widget.prefixIcon != null
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      obscureText = !obscureText;
-                    });
-                  },
-                  icon: !this.widget.isPassword
-                      ? Icon(
-                          this.widget.prefixIcon,
-                          size: 18,
-                          color: DeepfakeTheme.darkTheme.cardColor,
-                        )
-                      : Icon(
-                          obscureText
-                              ? FontAwesomeIcons.eye
-                              : FontAwesomeIcons.eyeSlash,
-                          size: 18,
-                          color: DeepfakeTheme.darkTheme.cardColor,
-                        ),
-                  color: DeepfakeTheme.darkTheme.cardColor,
-                )
-              : null,
-          hintStyle: TextStyle(
-            color:
-                DeepfakeTheme.darkTheme.colorScheme.background.withOpacity(0.7),
-          ),
-          hintText: this.widget.hintText,
-          focusColor: DeepfakeTheme.darkTheme.colorScheme.secondary,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: DeepfakeTheme.darkTheme.colorScheme.background,
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: DeepfakeTheme.darkTheme.colorScheme.secondary,
-              width: 2.0,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: DeepfakeTheme.darkTheme.colorScheme.error,
-              width: 2.0,
-            ),
-          ),
-        ),
-        validator: (value) {
-          if (value.isEmpty) {
-            return this.widget.validationMessage;
-          }
-          return null;
-        },
       ),
     );
   }
