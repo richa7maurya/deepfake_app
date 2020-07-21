@@ -77,7 +77,8 @@ class _ImageItemState extends State<ImageItem> {
 
   generatePDF() async {
     if (!downloaderInitialized) {
-      await FlutterDownloader.initialize(debug: true);
+      await FlutterDownloader.initialize(debug: true)
+          .catchError((err) => print(err));
       downloaderInitialized = !downloaderInitialized;
     }
     print("Generate PDF");
@@ -161,7 +162,8 @@ class _ImageItemState extends State<ImageItem> {
 
   downloadImage() async {
     if (!downloaderInitialized) {
-      await FlutterDownloader.initialize(debug: true);
+      await FlutterDownloader.initialize(debug: true)
+          .catchError((err) => print(err));
       downloaderInitialized = !downloaderInitialized;
     }
     print("Download Image");

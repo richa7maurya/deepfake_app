@@ -26,7 +26,12 @@ class VideoItem extends StatefulWidget {
   final Function callback;
 
   VideoItem(
-      this.callback, this.videoName, this.videoId, this.status, this.date);
+    this.callback,
+    this.videoName,
+    this.videoId,
+    this.status,
+    this.date,
+  );
 
   static var httpClient = new HttpClient();
 
@@ -117,8 +122,9 @@ class _VideoItemState extends State<VideoItem> {
 
   generatePDF() async {
     if (!downloaderInitialized) {
-      await FlutterDownloader.initialize(debug: true);
-      downloaderInitialized = !downloaderInitialized;
+      await FlutterDownloader.initialize(debug: true)
+          .catchError((err) => print(err));
+      downloaderInitialized = true;
     }
     print("Generate PDF");
     Options options = new Options(
@@ -207,8 +213,9 @@ class _VideoItemState extends State<VideoItem> {
 
   downloadVideo() async {
     if (!downloaderInitialized) {
-      await FlutterDownloader.initialize(debug: true);
-      downloaderInitialized = !downloaderInitialized;
+      await FlutterDownloader.initialize(debug: true)
+          .catchError((err) => print(err));
+      downloaderInitialized = true;
     }
     print("Download Image");
 
