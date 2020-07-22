@@ -174,28 +174,32 @@ class _LoginScreenState extends State<LoginScreen> {
   _showSnackbar(BuildContext context, String text) {
     final snackBar = SnackBar(
       content: Container(
-          alignment: Alignment.centerLeft,
-          height: 30,
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: SizedBox(
-                  child: CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation<Color>(
-                      DeepfakeTheme.darkTheme.colorScheme.primary,
-                    ),
+        alignment: Alignment.centerLeft,
+        height: 30,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SizedBox(
+                child: CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                    DeepfakeTheme.darkTheme.colorScheme.primary,
                   ),
-                  height: 18.0,
-                  width: 18.0,
                 ),
+                height: 18.0,
+                width: 18.0,
               ),
-              Text(
-                text,
-                style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 18,
+                color: DeepfakeTheme.darkTheme.colorScheme.onBackground,
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
       backgroundColor: DeepfakeTheme.darkTheme.colorScheme.background,
       duration: Duration(days: 1),
     );
@@ -291,25 +295,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPassword: true,
                       prefixIcon: FontAwesomeIcons.eye,
                       validate: (value) {
-                        print(value);
-                        if (value.contains(" "))
-                          return "No spaces allowed";
-                        else if (RegExp(
-                                r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
-                            .hasMatch(value))
-                          return null;
-                        else {
-                          print(value.length);
-                          if (value.length < 8)
-                            return "Length of password should be atleast 8 letter";
-                          else if (!RegExp(r"[A-Z]+").hasMatch(value))
-                            return "Password must contain atleast 1 Uppercase Letter";
-                          else if (!RegExp(r"[a-z]+").hasMatch(value))
-                            return "Password must contain atleast 1 Lowercase Letter";
-                          else if (!RegExp(r"[0-9]+").hasMatch(value))
-                            return "Password must contain atleast 1 number";
-                          else
-                            return "Password must contain atleast 1 special symbol";
+                        if (isLogin) {
+                          if (value.length == 0) return "Enter a password";
+                        } else {
+                          if (value.contains(" "))
+                            return "No spaces allowed";
+                          else if (RegExp(
+                                  r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+                              .hasMatch(value))
+                            return null;
+                          else {
+                            print(value.length);
+                            if (value.length < 8)
+                              return "Length of password should be atleast 8 letter";
+                            else if (!RegExp(r"[A-Z]+").hasMatch(value))
+                              return "Password must contain atleast 1 Uppercase Letter";
+                            else if (!RegExp(r"[a-z]+").hasMatch(value))
+                              return "Password must contain atleast 1 Lowercase Letter";
+                            else if (!RegExp(r"[0-9]+").hasMatch(value))
+                              return "Password must contain atleast 1 number";
+                            else
+                              return "Password must contain atleast 1 special symbol";
+                          }
                         }
                       },
                     ),

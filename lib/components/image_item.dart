@@ -239,14 +239,17 @@ class _ImageItemState extends State<ImageItem> {
                           )),
                     ])
                   : Padding(
-                      padding: const EdgeInsets.only(bottom: 40.0, top: 20),
+                      padding: const EdgeInsets.only(bottom: 10, top: 20),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          'No face(s) detected in the image.',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: _theme.colorScheme.onSurface,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'No face(s) detected in the image.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: _theme.colorScheme.onSurface,
+                            ),
                           ),
                         ),
                       ),

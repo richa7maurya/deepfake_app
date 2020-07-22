@@ -309,7 +309,6 @@ class _VideoItemState extends State<VideoItem> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
@@ -322,7 +321,6 @@ class _VideoItemState extends State<VideoItem> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
@@ -335,7 +333,6 @@ class _VideoItemState extends State<VideoItem> {
               ),
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.03,
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
