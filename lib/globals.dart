@@ -1,6 +1,6 @@
 // * Put any keys or global variables here to access anywhere
 bool loggedIn = false;
-String serverURL = "https://2faffdff179c.ngrok.io";
+String serverURL = "http://741b527aba4d.ngrok.io";
 String name = "";
 String userId = "";
 String bearerToken = "";

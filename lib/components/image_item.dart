@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/globals.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:deepfake_app/permissions.dart';
 import 'package:dio/dio.dart';
 import 'package:ext_storage/ext_storage.dart';
@@ -36,12 +37,6 @@ class _ImageItemState extends State<ImageItem> {
   final Dio dio = new Dio();
 
   final PermissionsService service = new PermissionsService();
-
-  final List<String> choices = <String>[
-    "Generate PDF Report",
-    "Delete Image",
-    "Display Image"
-  ];
 
   final icons = [
     FontAwesomeIcons.filePdf,
@@ -124,9 +119,11 @@ class _ImageItemState extends State<ImageItem> {
 
     String text = "";
     if (response.statusCode == 200) {
-      text = "Deletion Successful";
+      text = LangLocalization.of(context)
+          .getTranslatedValue('imgItem')["delsuccess"];
     } else {
-      text = "Oops! Something went wrong. Could not delete image.";
+      text =
+          LangLocalization.of(context).getTranslatedValue('imgItem')["delErr"];
     }
     showDialog(
       context: context,
@@ -144,7 +141,8 @@ class _ImageItemState extends State<ImageItem> {
           actions: <Widget>[
             new FlatButton(
               child: Text(
-                "Ok",
+                LangLocalization.of(context)
+                    .getTranslatedValue('classify')["dialog"],
                 style: TextStyle(
                   color: _theme.colorScheme.onSurface,
                 ),
@@ -245,7 +243,8 @@ class _ImageItemState extends State<ImageItem> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            'No face(s) detected in the image.',
+                            LangLocalization.of(context)
+                                .getTranslatedValue('imgItem')["noFace"],
                             style: TextStyle(
                               fontSize: 20,
                               color: _theme.colorScheme.onSurface,
@@ -259,7 +258,9 @@ class _ImageItemState extends State<ImageItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'File name - ' + this.widget.imageName,
+                  LangLocalization.of(context)
+                          .getTranslatedValue('imgItem')["filename"] +
+                      this.widget.imageName,
                   style: TextStyle(
                     fontSize: 20,
                     color: _theme.colorScheme.onSurface,
@@ -271,7 +272,9 @@ class _ImageItemState extends State<ImageItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'Status - ' + this.widget.status,
+                  LangLocalization.of(context)
+                          .getTranslatedValue('imgItem')["status"] +
+                      this.widget.status,
                   style: TextStyle(
                     fontSize: 20,
                     color: _theme.colorScheme.onSurface,
@@ -283,7 +286,8 @@ class _ImageItemState extends State<ImageItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'Date - ' +
+                  LangLocalization.of(context)
+                          .getTranslatedValue('imgItem')["date"] +
                       new DateFormat.yMd(
                         Localizations.localeOf(context).languageCode +
                             '_' +
@@ -310,6 +314,11 @@ class _ImageItemState extends State<ImageItem> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
+    final List<String> choices = <String>[
+      LangLocalization.of(context).getTranslatedValue('history')["op1"],
+      LangLocalization.of(context).getTranslatedValue('imgItem')["op2"],
+      LangLocalization.of(context).getTranslatedValue('imgItem')["op3"],
+    ];
     return Card(
       elevation: 2,
       child: Container(

@@ -1,6 +1,7 @@
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/components/video_item.dart';
 import 'package:deepfake_app/globals.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -142,7 +143,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             Padding(
                               padding: const EdgeInsets.only(top: 16.0),
                               child: Text(
-                                "Nothing to display here. Start Classifying",
+                                LangLocalization.of(context)
+                                    .getTranslatedValue('history')["msg"],
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: _theme.colorScheme.onBackground,

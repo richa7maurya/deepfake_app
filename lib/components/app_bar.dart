@@ -1,8 +1,11 @@
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/colors.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../main.dart';
 
 class DeepfakeAppBar extends StatefulWidget implements PreferredSizeWidget {
   DeepfakeAppBar({
@@ -30,7 +33,7 @@ class Logout extends StatelessWidget {
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
     return Text(
-      "Logout",
+      LangLocalization.of(context).getTranslatedValue('appbar')["logout"],
       style: TextStyle(
         color: _theme.colorScheme.onBackground,
       ),
@@ -38,9 +41,60 @@ class Logout extends StatelessWidget {
   }
 }
 
+class Language extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final List<Map<String, String>> languages = [
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["eng"],
+        "value": "en"
+      },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["hindi"],
+        "value": "hi"
+      },
+    ];
+    ThemeChanger _themeChanger = Provider.of(context);
+    ThemeData _theme = _themeChanger.getTheme();
+    return new DropdownButton<String>(
+      hint: Text(
+        LangLocalization.of(context).getTranslatedValue('appbar')["lang"],
+        style: TextStyle(color: _theme.colorScheme.onBackground),
+      ),
+      dropdownColor: _theme.colorScheme.background,
+      items: languages.map((Map<String, String> language) {
+        return new DropdownMenuItem<String>(
+          onTap: () {
+            Locale _temp;
+            switch (language["value"]) {
+              case 'en':
+                _temp = Locale('en', 'US');
+                break;
+              case 'hi':
+                _temp = Locale('hi', 'IN');
+                break;
+            }
+            MaterialAppWithTheme.setLocale(context, _temp);
+            print(language["value"]);
+          },
+          value: language["value"],
+          child: new Text(
+            language["language"],
+            style: TextStyle(color: _theme.colorScheme.onBackground),
+          ),
+        );
+      }).toList(),
+      onChanged: (_) {},
+    );
+  }
+}
+
 class _DeepfakeAppBarState extends State<DeepfakeAppBar> {
   final options = [
     ThemeChangerWidget(),
+    Language(),
     Logout(),
   ];
 
@@ -129,7 +183,7 @@ class _ThemeChangerWidgetState extends State<ThemeChangerWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Theme",
+          LangLocalization.of(context).getTranslatedValue('appbar')["theme"],
           style: TextStyle(
             color: _theme.colorScheme.onSurface,
           ),

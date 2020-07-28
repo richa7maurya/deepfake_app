@@ -1,5 +1,6 @@
 import 'package:deepfake_app/components/app_bar.dart';
 import 'package:deepfake_app/globals.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:deepfake_app/screens/about_screen.dart';
 import 'package:deepfake_app/screens/classify_screen.dart';
 import 'package:deepfake_app/screens/history_screen.dart';
@@ -17,7 +18,6 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  final titles = ["Home", "Classify", "History", "About Us"];
   int _currentIndex = 0;
   HomeScreen homeScreen;
   final screens = [
@@ -70,6 +70,12 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext context) {
+    final titles = [
+      LangLocalization.of(context).getTranslatedValue('routes')["home"],
+      LangLocalization.of(context).getTranslatedValue('routes')["classify"],
+      LangLocalization.of(context).getTranslatedValue('routes')["History"],
+      LangLocalization.of(context).getTranslatedValue('routes')["About"],
+    ];
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
     return SafeArea(
@@ -100,7 +106,8 @@ class _RootState extends State<Root> {
                   BottomNavigationBarItem(
                     backgroundColor: _theme.colorScheme.secondary,
                     title: Text(
-                      'Home',
+                      LangLocalization.of(context)
+                          .getTranslatedValue('routes')["home"],
                     ),
                     icon: Icon(
                       FontAwesomeIcons.home,
@@ -108,21 +115,30 @@ class _RootState extends State<Root> {
                   ),
                   BottomNavigationBarItem(
                     backgroundColor: _theme.colorScheme.secondary,
-                    title: Text('Classify'),
+                    title: Text(
+                      LangLocalization.of(context)
+                          .getTranslatedValue('routes')["classify"],
+                    ),
                     icon: Icon(
                       FontAwesomeIcons.atom,
                     ),
                   ),
                   BottomNavigationBarItem(
                     backgroundColor: _theme.colorScheme.secondary,
-                    title: Text('History'),
+                    title: Text(
+                      LangLocalization.of(context)
+                          .getTranslatedValue('routes')["History"],
+                    ),
                     icon: Icon(
                       FontAwesomeIcons.history,
                     ),
                   ),
                   BottomNavigationBarItem(
                     backgroundColor: _theme.colorScheme.secondary,
-                    title: Text('About Us'),
+                    title: Text(
+                      LangLocalization.of(context)
+                          .getTranslatedValue('routes')["About"],
+                    ),
                     icon: Icon(
                       FontAwesomeIcons.users,
                     ),

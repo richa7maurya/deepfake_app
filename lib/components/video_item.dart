@@ -4,6 +4,7 @@ import 'package:chewie/chewie.dart';
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/colors.dart';
 import 'package:deepfake_app/globals.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:deepfake_app/permissions.dart';
 import 'package:dio/dio.dart';
 import 'package:ext_storage/ext_storage.dart';
@@ -50,12 +51,6 @@ class _VideoItemState extends State<VideoItem> {
 
   final PermissionsService service = new PermissionsService();
 
-  final List<String> choices = <String>[
-    "Generate PDF Report",
-    "Delete Video",
-    "Play Video"
-  ];
-
   final icons = [
     FontAwesomeIcons.filePdf,
     FontAwesomeIcons.trash,
@@ -96,7 +91,8 @@ class _VideoItemState extends State<VideoItem> {
             return AlertDialog(
               backgroundColor: _theme.colorScheme.surface,
               content: Text(
-                'Oops! Something went wrong displaying your video',
+                LangLocalization.of(context)
+                    .getTranslatedValue('vidItem')["errmsg"],
                 style: TextStyle(
                   color: _theme.colorScheme.onSurface,
                 ),
@@ -104,7 +100,8 @@ class _VideoItemState extends State<VideoItem> {
               actions: <Widget>[
                 new FlatButton(
                   child: Text(
-                    "Ok",
+                    LangLocalization.of(context)
+                        .getTranslatedValue('classify')["dialog"],
                     style: TextStyle(
                       color: _theme.colorScheme.onSurface,
                     ),
@@ -172,11 +169,13 @@ class _VideoItemState extends State<VideoItem> {
           data: data, options: options);
 
       if (response.data["success"]) {
-        text = "Deletion Successful";
+        text = LangLocalization.of(context)
+            .getTranslatedValue('vid-item')["delmsg"];
       }
     } on DioError catch (e) {
       if (e.response.statusCode != 200)
-        text = "Oops! Something went wrong. Could not delete video.";
+        text = LangLocalization.of(context)
+            .getTranslatedValue('vid-item')["delErrMsg"];
     }
 
     showDialog(
@@ -195,7 +194,8 @@ class _VideoItemState extends State<VideoItem> {
           actions: <Widget>[
             new FlatButton(
               child: Text(
-                "Ok",
+                LangLocalization.of(context)
+                    .getTranslatedValue('classify')["dialog"],
                 style: TextStyle(
                   color: _theme.colorScheme.onSurface,
                 ),
@@ -312,7 +312,9 @@ class _VideoItemState extends State<VideoItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'File name - ' + this.widget.videoName,
+                  LangLocalization.of(context)
+                          .getTranslatedValue('vidItem')["filename"] +
+                      this.widget.videoName,
                   style: TextStyle(
                     fontSize: 20,
                     color: _theme.colorScheme.onSurface,
@@ -324,7 +326,9 @@ class _VideoItemState extends State<VideoItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'Status - ' + this.widget.status,
+                  LangLocalization.of(context)
+                          .getTranslatedValue('vidItem')["status"] +
+                      this.widget.status,
                   style: TextStyle(
                     fontSize: 20,
                     color: _theme.colorScheme.onSurface,
@@ -336,7 +340,8 @@ class _VideoItemState extends State<VideoItem> {
                   top: MediaQuery.of(context).size.height * 0.03,
                 ),
                 child: Text(
-                  'Date - ' +
+                  LangLocalization.of(context)
+                          .getTranslatedValue('vidItem')["date"] +
                       new DateFormat.yMd(
                         'en_IN',
                       ).add_jm().format(
@@ -359,6 +364,11 @@ class _VideoItemState extends State<VideoItem> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
+    final List<String> choices = <String>[
+      LangLocalization.of(context).getTranslatedValue('history')["op1"],
+      LangLocalization.of(context).getTranslatedValue('vidItem')["op2"],
+      LangLocalization.of(context).getTranslatedValue('vidItem')["op3"],
+    ];
     return Card(
       elevation: 2,
       child: Container(

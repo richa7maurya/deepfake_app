@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/colors.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,19 +87,23 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
         print("-------------------------");
 
         if (response.statusCode == 200) {
-          text =
-              "Your video has been sent for classification. You'll see the results in your History.";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_response200"];
         } else if (response.statusCode == 412 || response.statusCode == 413) {
-          text = "Max permissible file size/video length exceeded!";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_response412"];
         } else if (response.statusCode == 400) {
-          text = "Unexpected issue with file";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_response400"];
         } else if (response.statusCode == 422) {
-          text = "No video codec found";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_response422"];
         } else if (response.statusCode == 429) {
-          text =
-              "Too many videos sent for classification within short duration";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_response429"];
         } else {
-          text = "Unknown error occurred. Try again later!";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["vid_responseX"];
         }
       } else {
         FormData formData = new FormData();
@@ -119,17 +124,19 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
         print("-------------------------");
 
         if (response.statusCode == 200) {
-          text =
-              "Your image has been sent for classification. You'll see the results in your History.";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["img_response200"];
         } else if (response.statusCode == 429) {
-          text =
-              "Too many images sent for classification within short duration";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["img_response429"];
         } else {
-          text = "Unknown error occurred. Try again later!";
+          text = LangLocalization.of(context)
+              .getTranslatedValue('classify')["img_responseX"];
         }
       }
     } else {
-      text = "Max permissible file size length exceeded!";
+      text = LangLocalization.of(context)
+          .getTranslatedValue('classify')["img_responseY"];
     }
     this.setState(() {
       this.isAPICalled = false;
@@ -150,7 +157,8 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
           actions: <Widget>[
             new FlatButton(
               child: Text(
-                "Ok",
+                LangLocalization.of(context)
+                    .getTranslatedValue('classify')["dialog"],
                 style: TextStyle(
                   color: _theme.colorScheme.onSurface,
                 ),
@@ -184,7 +192,8 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
               ? Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    'Hi! You can begin classifying videos or photos by tapping the UPLOAD button below.',
+                    LangLocalization.of(context)
+                        .getTranslatedValue('classify')["intro"],
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20.0,
@@ -223,7 +232,11 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 28.0),
                     child: Text(
-                      this.file == null ? 'UPLOAD' : 'CLASSIFY',
+                      this.file == null
+                          ? LangLocalization.of(context)
+                              .getTranslatedValue('classify')["upload"]
+                          : LangLocalization.of(context)
+                              .getTranslatedValue('classify')["classify"],
                       style: TextStyle(
                         color: _theme.colorScheme.onPrimary,
                       ),

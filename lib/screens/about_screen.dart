@@ -1,4 +1,5 @@
 import 'package:deepfake_app/blocs/theme.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +77,7 @@ class _AboutScreenState extends State<AboutScreen> {
     for (int i = 0; i < this.team.length; i++) {
       teamList.add(
         TeamCard(
+            i,
             this.team[i]["name"],
             this.team[i]["designation"],
             "https://github.com/" + this.team[i]["github"],
@@ -104,15 +106,17 @@ class _AboutScreenState extends State<AboutScreen> {
 }
 
 class TeamCard extends StatelessWidget {
-  final designation;
+  String designation;
   final github;
-  final name;
+  String name;
   final linkedin;
   final img;
   final url;
-  final quote;
+  String quote;
   final quoteHeight;
+  final index;
   TeamCard(
+    this.index,
     this.name,
     this.designation,
     this.github,
@@ -168,14 +172,16 @@ class TeamCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      this.name,
+                      LangLocalization.of(context)
+                          .getTranslatedValue('about')["name${this.index + 1}"],
                       style: TextStyle(
                         color: _theme.colorScheme.onSurface,
                         fontSize: 20,
                       ),
                     ),
                     Text(
-                      this.designation,
+                      LangLocalization.of(context).getTranslatedValue(
+                          'about')["designation${this.index + 1}"],
                       style: TextStyle(
                         color: _theme.colorScheme.onSurface,
                         fontSize: 14,
@@ -228,7 +234,8 @@ class TeamCard extends StatelessWidget {
                         Container(
                           width: 178,
                           child: Text(
-                            this.quote,
+                            LangLocalization.of(context).getTranslatedValue(
+                                'about')["quote${this.index + 1}"],
                             overflow: TextOverflow.visible,
                             textAlign: TextAlign.center,
                             style: TextStyle(

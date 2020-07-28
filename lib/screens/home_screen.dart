@@ -1,4 +1,5 @@
 import 'package:deepfake_app/blocs/theme.dart';
+import 'package:deepfake_app/localization/LangLocalization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -90,7 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(bottom: 8),
                             child: Text(
-                              'What are we solving?',
+                              LangLocalization.of(context)
+                                  .getTranslatedValue('home')["title"],
                               style: TextStyle(
                                 color: _theme.colorScheme.onSurface,
                                 fontSize: 20,
@@ -102,7 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               bottom: 12,
                             ),
                             child: Text(
-                              'Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.',
+                              LangLocalization.of(context)
+                                  .getTranslatedValue('home')["para"],
                               style: TextStyle(
                                 color: _theme.colorScheme.onSurface,
                                 fontSize: 16,
@@ -125,7 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: _theme.colorScheme.primary,
                 onPressed: () => this.widget.callback(1),
                 child: Text(
-                  'Start Classifying',
+                  LangLocalization.of(context)
+                      .getTranslatedValue('home')["button"],
                   style: TextStyle(
                     color: _theme.colorScheme.onPrimary,
                   ),
