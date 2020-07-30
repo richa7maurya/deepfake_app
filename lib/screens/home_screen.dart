@@ -19,18 +19,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = YoutubePlayerController(
+    this._controller = YoutubePlayerController(
       initialVideoId: 'C8FO0P2a3dA',
       flags: YoutubePlayerFlags(
-        autoPlay: false,
-        mute: false,
+        autoPlay: true,
+        mute: true,
       ),
     );
   }
 
   @override
   void dispose() {
-    super.dispose();
+    super.dispose(); //
+    _controller.dispose();
   }
 
   @override
@@ -61,12 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: YoutubePlayer(
                               controller: _controller,
                               showVideoProgressIndicator: true,
-                              progressIndicatorColor:
-                                  _theme.colorScheme.primary,
-                              progressColors: ProgressBarColors(
-                                playedColor: _theme.colorScheme.primary,
-                                handleColor: _theme.colorScheme.secondary,
-                              ),
                             ),
                           ),
                           decoration: BoxDecoration(

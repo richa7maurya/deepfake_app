@@ -1,6 +1,6 @@
 // * Put any keys or global variables here to access anywhere
 bool loggedIn = false;
-String serverURL = "http://deepfake.eastus.cloudapp.azure.com:3000";
+String serverURL = "https://53be5a9f93be.ngrok.io";
 String name = "";
 String userId = "";
 String bearerToken = "";
