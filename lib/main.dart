@@ -53,6 +53,11 @@ class _MaterialAppWithThemeState extends State<MaterialAppWithTheme> {
         const Locale('en', 'US'), // English
         const Locale('hi', 'IN'), // Hindi - India
         const Locale('gu', 'IN'), // Gujarati - India
+        const Locale('bn', 'IN'), // bengali - India
+        const Locale('mr', 'IN'), // Marathi - India
+        const Locale('ml', 'IN'), // mlyalam - India
+        const Locale('te', 'IN'), // Telugu - India
+        const Locale('pa', 'IN'), // Panjabi - India
       ],
       localizationsDelegates: [
         LangLocalization.delegate,

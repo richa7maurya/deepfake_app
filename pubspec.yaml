@@ -5,44 +5,50 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 module:
-  androidX: true
+    androidX: true
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+    sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+    flutter:
+        sdk: flutter
 
-  cupertino_icons: ^0.1.3
-  font_awesome_flutter:
-  video_player:
-  youtube_player_flutter:
-  image_picker:
-  chewie:
-  url_launcher:
-  file_picker:
-  requests:
-  dio:
-  flutter_downloader:
-  ext_storage:
-  permission_handler:
-  provider:
-  flutter_localizations:
-    sdk: flutter
+    cupertino_icons: ^0.1.3
+    font_awesome_flutter:
+    video_player:
+    youtube_player_flutter:
+    image_picker:
+    chewie:
+    url_launcher:
+    file_picker:
+    requests:
+    dio:
+    flutter_downloader:
+    ext_storage:
+    permission_handler:
+    provider:
+    flutter_localizations:
+        sdk: flutter
 
 flutter:
-  assets:
-    - assets/
-    - lang/en.json
-    - lang/hi.json
-    - lang/gu.json
-  uses-material-design: true
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: fonts/Poppins-Regular.ttf
-        - asset: fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: fonts/Poppins-SemiBold.ttf
-          weight: 600
+    assets:
+        - assets/
+        - lang/en.json
+        - lang/hi.json
+        - lang/gu.json
+        - lang/bn.json
+        - lang/mr.json
+        - lang/ml.json
+        - lang/te.json
+        - lang/pa.json
+
+    uses-material-design: true
+    fonts:
+        - family: Poppins
+          fonts:
+              - asset: fonts/Poppins-Regular.ttf
+              - asset: fonts/Poppins-Medium.ttf
+                weight: 500
+              - asset: fonts/Poppins-SemiBold.ttf
+                weight: 600

@@ -60,6 +60,31 @@ class Language extends StatelessWidget {
             LangLocalization.of(context).getTranslatedValue('appbar')["guj"],
         "value": "gu"
       },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["bn"],
+        "value": "bn"
+      },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["mr"],
+        "value": "mr"
+      },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["ml"],
+        "value": "ml"
+      },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["te"],
+        "value": "te"
+      },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["pa"],
+        "value": "pa"
+      },
     ];
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
@@ -74,6 +99,9 @@ class Language extends StatelessWidget {
           onTap: () {
             Locale _temp;
             switch (language["value"]) {
+              case 'bn':
+                _temp = Locale('bn', 'IN');
+                break;
               case 'en':
                 _temp = Locale('en', 'US');
                 break;
@@ -82,6 +110,18 @@ class Language extends StatelessWidget {
                 break;
               case 'gu':
                 _temp = Locale('gu', 'IN');
+                break;
+              case 'mr':
+                _temp = Locale('mr', 'IN');
+                break;
+              case 'ml':
+                _temp = Locale('ml', 'IN');
+                break;
+              case 'te':
+                _temp = Locale('te', 'IN');
+                break;
+              case 'pa':
+                _temp = Locale('pa', 'IN');
                 break;
             }
             MaterialAppWithTheme.setLocale(context, _temp);

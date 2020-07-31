@@ -1,86 +1,91 @@
 {
-	"home": {
-		"title": "What are we solving..?",
-		"para": "Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.",
-		"button": "Start Classifying"
-	},
-	"history": {
-		"msg": "Nothing to display here. Start Classifying",
-		"op1": "Generate PDF Report"
-	},
-	"appbar": {
-		"logout": "Logout",
-		"lang": "Language",
-		"theme": "Theme",
-		"hindi": "हिंदी",
-		"eng": "English",
-		"guj": "ગુજરાતી"
-	},
-	"about": {
-		"name1": "Sakshi Doshi",
-		"designation1": "Team Leader",
-		"quote1": "Be brave enough to be bad at something new",
+    "home": {
+        "title": "What are we solving..?",
+        "para": "Cyber Criminals are using Image processing tools and techniques for producing the variety of crimes including Image Modification,  Fabrication using Cheap & Deep Fake  Videos/Image. Desired Solution: The solution should focus on help the Image/Video verifier/examiner find out and differentiate a  fabricated Image/Video with an original one.  Technology that can help address the issue: AI/ML techniques can be used.",
+        "button": "Start Classifying"
+    },
+    "history": {
+        "msg": "Nothing to display here. Start Classifying",
+        "op1": "Generate PDF Report"
+    },
+    "appbar": {
+        "logout": "Logout",
+        "lang": "Language",
+        "theme": "Theme",
+        "hindi": "हिंदी",
+        "eng": "English",
+        "guj": "ગુજરાતી",
+        "mr": "मराठी",
+        "te": "తెలుగు",
+        "bn": "বাংলা",
+        "pa": "ਪੰਜਾਬੀ",
+        "ml": "മലയാളം"
+    },
+    "about": {
+        "name1": "Sakshi Doshi",
+        "designation1": "Team Leader",
+        "quote1": "Be brave enough to be bad at something new",
 
-		"name2": "Akash Lende",
-		"designation2": "Full Stack Developer",
-		"quote2": "Turning Coffee ☕  into Code 💻",
+        "name2": "Akash Lende",
+        "designation2": "Full Stack Developer",
+        "quote2": "Turning Coffee ☕  into Code 💻",
 
-		"name3": "Richa Maurya",
-		"designation3": "Full Stack Developer",
-		"quote3": "Trust the Process ✌",
+        "name3": "Richa Maurya",
+        "designation3": "Full Stack Developer",
+        "quote3": "Trust the Process ✌",
 
-		"name4": "Varun Irani",
-		"designation4": "Full Stack Developer",
-		"quote4": "Pianist 🎹 + Developer ⚛️ = Gullible Genius",
+        "name4": "Varun Irani",
+        "designation4": "Full Stack Developer",
+        "quote4": "Pianist 🎹 + Developer ⚛️ = Gullible Genius",
 
-		"name5": "Parag Ghorpade",
-		"designation5": "ML Developer",
-		"quote5": "Learning . . .  1 epoch at a time ⏳",
+        "name5": "Parag Ghorpade",
+        "designation5": "ML Developer",
+        "quote5": "Learning . . .  1 epoch at a time ⏳",
 
-		"name6": "Hrishikesh Mane",
-		"designation6": "ML Developer",
-		"quote6": "Struggling for extra cloud credits ☁💸"
-	},
-	"classify": {
-		"dialog": "Ok",
-		"intro": "Hi! You can begin classifying videos or photos by tapping the UPLOAD button below.",
-		"upload": "UPLOAD",
-		"classify": "CLASSIFY",
-		"img_response200": "Your image has been sent for classification. You'll see the results in your History.",
-		"img_response429": "Too many images sent for classification within short duration",
-		"img_responseX": "Unknown error occurred. Try again later!",
-		"img_responseY": "Max permissible file size length exceeded!",
-		"vid_response200": "Your video has been sent for classification. You'll see the results in your History.",
-		"vid_response412": "Max permissible file size/video length exceeded!",
-		"vid_response400": "Unexpected issue with file",
-		"vid_response422": "No video codec found",
-		"vid_response429": "Too many videos sent for classification within short duration",
-		"vid_responseX": "Unknown error occurred. Try again later!"
-	},
-	"routes": {
-		"home": "Home",
-		"classify": "Classify",
-		"History": "History",
-		"About": "About Us"
-	},
-	"vidItem": {
-		"errmsg": "Oops! Something went wrong displaying your video",
-		"delmsg": "Deletion Successful",
-		"delErrMsg": "Oops! Something went wrong. Could not delete video.",
-		"filename": "File name -",
-		"status": "Status -",
-		"date": "Date -",
-		"op2": "Delete Video",
-		"op3": "Play Video"
-	},
-	"imgItem": {
-		"delsuccess": "Deletion Successful",
-		"delErr": "Oops! Something went wrong. Could not delete image.",
-		"noFace": "No face(s) detected in the image.",
-		"filename": "File name -",
-		"status": "Status -",
-		"date": "Date -",
-		"op2": "Delete Image",
-		"op3": "Display Image"
-	}
+        "name6": "Hrishikesh Mane",
+        "designation6": "ML Developer",
+        "quote6": "Struggling for extra cloud credits ☁💸"
+    },
+    "classify": {
+        "dialog": "Ok",
+        "intro": "Hi! You can begin classifying videos or photos by tapping the UPLOAD button below.",
+        "upload": "UPLOAD",
+        "classify": "CLASSIFY",
+        "img_response200": "Your image has been sent for classification. You'll see the results in your History.",
+        "img_response429": "Too many images sent for classification within short duration",
+        "img_responseX": "Unknown error occurred. Try again later!",
+        "img_responseY": "Max permissible file size length exceeded!",
+        "vid_response200": "Your video has been sent for classification. You'll see the results in your History.",
+        "vid_response412": "Max permissible file size/video length exceeded!",
+        "vid_response400": "Unexpected issue with file",
+        "vid_response422": "No video codec found",
+        "vid_response429": "Too many videos sent for classification within short duration",
+        "vid_responseX": "Unknown error occurred. Try again later!"
+    },
+    "routes": {
+        "home": "Home",
+        "classify": "Classify",
+        "History": "History",
+        "About": "About Us"
+    },
+    "vidItem": {
+        "errmsg": "Oops! Something went wrong displaying your video",
+        "delmsg": "Deletion Successful",
+        "delErrMsg": "Oops! Something went wrong. Could not delete video.",
+        "filename": "File name -",
+        "status": "Status -",
+        "date": "Date -",
+        "op2": "Delete Video",
+        "op3": "Play Video"
+    },
+    "imgItem": {
+        "delsuccess": "Deletion Successful",
+        "delErr": "Oops! Something went wrong. Could not delete image.",
+        "noFace": "No face(s) detected in the image.",
+        "filename": "File name -",
+        "status": "Status -",
+        "date": "Date -",
+        "op2": "Delete Image",
+        "op3": "Display Image"
+    }
 }

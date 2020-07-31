@@ -35,7 +35,8 @@ class _LangLocalizationDelegate
   const _LangLocalizationDelegate();
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'hi', 'gu'].contains(locale.languageCode);
+    return ['en', 'hi', 'gu', 'bn', 'mr', 'ml', 'te', 'pa']
+        .contains(locale.languageCode);
   }
 
   @override
