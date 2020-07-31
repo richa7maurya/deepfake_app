@@ -55,6 +55,11 @@ class Language extends StatelessWidget {
             LangLocalization.of(context).getTranslatedValue('appbar')["hindi"],
         "value": "hi"
       },
+      {
+        "language":
+            LangLocalization.of(context).getTranslatedValue('appbar')["guj"],
+        "value": "gu"
+      },
     ];
     ThemeChanger _themeChanger = Provider.of(context);
     ThemeData _theme = _themeChanger.getTheme();
@@ -74,6 +79,9 @@ class Language extends StatelessWidget {
                 break;
               case 'hi':
                 _temp = Locale('hi', 'IN');
+                break;
+              case 'gu':
+                _temp = Locale('gu', 'IN');
                 break;
             }
             MaterialAppWithTheme.setLocale(context, _temp);
