@@ -1,5 +1,7 @@
 import 'package:deepfake_app/blocs/theme.dart';
 import 'package:deepfake_app/localization/LangLocalization.dart';
+import 'package:deepfake_app/root.dart';
+import 'package:deepfake_app/screens/classify_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';

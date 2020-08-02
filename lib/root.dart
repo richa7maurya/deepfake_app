@@ -41,6 +41,7 @@ class _RootState extends State<Root> {
     setState(() {
       _currentIndex = i;
     });
+    controller.jumpToPage(i);
   }
 
   void rebuildAllChildren(BuildContext context) {

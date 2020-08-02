@@ -22,6 +22,7 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
   File file;
   bool isVideo;
   bool isAPICalled;
+
   Dio dio = new Dio();
 
   @override
@@ -81,6 +82,9 @@ class _ClassifyScreenState extends State<ClassifyScreen> {
         response = await dio.post(serverURL + "/classify",
             data: formData, options: options);
 
+        this.setState(() {
+          this.file = null;
+        });
         print("-------------------------");
         print(response.statusCode);
         print(response);
