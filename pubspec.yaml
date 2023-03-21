@@ -31,7 +31,7 @@ dependencies:
   url_launcher:
   file_picker:
   requests:
-  dio:
+  dio: ^5.0.3
   flutter_downloader:
   ext_storage:
   permission_handler:
